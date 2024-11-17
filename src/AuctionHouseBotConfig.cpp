@@ -25,7 +25,6 @@
 #include "ItemTemplate.h"
 #include "Log.h"
 #include "ObjectMgr.h"
-#include "QueryResult.h"
 #include "WorldSession.h"
 
 #include "AuctionHouseBotCommon.h"
@@ -204,6 +203,7 @@ AHBConfig::AHBConfig(uint32 ahid, AHBConfig* conf)
     BuyMethod                      = conf->BuyMethod;
     SellMethod                     = conf->SellMethod;
     ConsiderOnlyBotAuctions        = conf->ConsiderOnlyBotAuctions;
+    SellZeroPriceItems             = conf->SellZeroPriceItems;
     ItemsPerCycle                  = conf->ItemsPerCycle;
     Vendor_Items                   = conf->Vendor_Items;
     Loot_Items                     = conf->Loot_Items;
@@ -211,6 +211,7 @@ AHBConfig::AHBConfig(uint32 ahid, AHBConfig* conf)
     Vendor_TGs                     = conf->Vendor_TGs;
     Loot_TGs                       = conf->Loot_TGs;
     Other_TGs                      = conf->Other_TGs;
+    Profession_Items               = conf->Profession_Items;
     No_Bind                        = conf->No_Bind;
     Bind_When_Picked_Up            = conf->Bind_When_Picked_Up;
     Bind_When_Equipped             = conf->Bind_When_Equipped;
@@ -511,6 +512,7 @@ void AHBConfig::Reset()
     SellMethod                     = false;
     SellAtMarketPrice              = false;
     ConsiderOnlyBotAuctions        = false;
+    SellZeroPriceItems             = false;
     ItemsPerCycle                  = 200;
 
     Vendor_Items                   = false;
@@ -519,6 +521,7 @@ void AHBConfig::Reset()
     Vendor_TGs                     = false;
     Loot_TGs                       = true;
     Other_TGs                      = false;
+    Profession_Items               = false;
 
     No_Bind                        = true;
     Bind_When_Picked_Up            = true;
@@ -2015,6 +2018,8 @@ uint64 AHBConfig::GetItemPrice(uint32 id)
 
 void AHBConfig::Initialize(std::set<uint32> botsIds)
 {
+    LOG_INFO("module", "Initializing configuration for AH {}...", AHID);
+
     InitializeFromFile();
     InitializeFromSql(botsIds);
     InitializeBins();
@@ -2045,6 +2050,7 @@ void AHBConfig::InitializeFromFile()
     DivisibleStacks                = sConfigMgr->GetOption<bool>  ("AuctionHouseBot.DivisibleStacks"        , false);
     ElapsingTimeClass              = sConfigMgr->GetOption<uint32>("AuctionHouseBot.DuplicatesCount"        , 1);
     ConsiderOnlyBotAuctions        = sConfigMgr->GetOption<bool>  ("AuctionHouseBot.ConsiderOnlyBotAuctions", false);
+    SellZeroPriceItems             = sConfigMgr->GetOption<bool>  ("AuctionHouseBot.SellZeroPriceItems"     , false);
     ItemsPerCycle                  = sConfigMgr->GetOption<uint32>("AuctionHouseBot.ItemsPerCycle"          , 200);
 
     //
@@ -2057,6 +2063,7 @@ void AHBConfig::InitializeFromFile()
     Vendor_TGs                     = sConfigMgr->GetOption<bool>  ("AuctionHouseBot.VendorTradeGoods" , false);
     Loot_TGs                       = sConfigMgr->GetOption<bool>  ("AuctionHouseBot.LootTradeGoods"   , true);
     Other_TGs                      = sConfigMgr->GetOption<bool>  ("AuctionHouseBot.OtherTradeGoods"  , false);
+    Profession_Items               = sConfigMgr->GetOption<bool>  ("AuctionHouseBot.ProfessionItems"  , false);
 
     //
     // Flags: items binding
@@ -2544,6 +2551,30 @@ void AHBConfig::InitializeFromSql(std::set<uint32> botsIds)
         }
     }
 
+    //
+    // Include profession items
+    //
+
+    if (Profession_Items)
+    {
+        itemsResults = WorldDatabase.Query(
+            "SELECT item FROM auctionhousebot_professionItems");
+
+        if (itemsResults)
+        {
+            do
+            {
+                Field* fields = itemsResults->Fetch();
+                uint32 item   = fields[0].Get<uint32>();
+                
+                if(LootItems.find(item) == LootItems.end())
+                {
+                    LootItems.insert(fields[0].Get<uint32>());
+                }
+            } while (itemsResults->NextRow());
+        }
+    }
+
     if (DebugOutConfig)
     {
         LOG_INFO("module", "Loaded {} items from lootable items", uint32(LootItems.size()));
@@ -2594,28 +2625,35 @@ void AHBConfig::InitializeBins()
         // Exclude items with no possible price
         //
 
-        if (SellMethod)
+        if (!SellZeroPriceItems)
         {
-            if (itr->second.BuyPrice == 0)
+            if (SellMethod)
+            {
+                if (itr->second.BuyPrice == 0)
+                {
+                    continue;
+                }
+            }
+		 
+            else
+		 
+										   
+            {
+                if (itr->second.SellPrice == 0)
+                {
+                    continue;
+                }
+            }
+		 
+
+            //
+            // Exclude items with no costs associated, in any case
+            //
+
+            if ((itr->second.BuyPrice == 0) && (itr->second.SellPrice == 0))
             {
                 continue;
             }
-        }
-        else
-        {
-            if (itr->second.SellPrice == 0)
-            {
-                continue;
-            }
-        }
-
-        //
-        // Exclude items with no costs associated, in any case
-        //
-
-        if ((itr->second.BuyPrice == 0) && (itr->second.SellPrice == 0))
-        {
-            continue;
         }
 
         //
@@ -3358,27 +3396,32 @@ void AHBConfig::InitializeBins()
             return;
         }
 
-        LOG_INFO("module", "AHBot: {} disabled items", uint32(DisableItemStore.size()));
+        LOG_INFO("module", ">> Using all compatible items ({} disabled)", uint32(DisableItemStore.size()));
     }
     else
     {
-        LOG_INFO("module", "AHBot: Using a whitelist of {} items", uint32(SellerWhiteList.size()));
+        LOG_INFO("module", ">> Using a whitelist of {} items", uint32(SellerWhiteList.size()));
     }
 
-    LOG_INFO("module", "AHBot: loaded {} grey   trade goods", uint32(GreyTradeGoodsBin.size()));
-    LOG_INFO("module", "AHBot: loaded {} white  trade goods", uint32(WhiteTradeGoodsBin.size()));
-    LOG_INFO("module", "AHBot: loaded {} green  trade goods", uint32(GreenTradeGoodsBin.size()));
-    LOG_INFO("module", "AHBot: loaded {} blue   trade goods", uint32(BlueTradeGoodsBin.size()));
-    LOG_INFO("module", "AHBot: loaded {} purple trade goods", uint32(PurpleTradeGoodsBin.size()));
-    LOG_INFO("module", "AHBot: loaded {} orange trade goods", uint32(OrangeTradeGoodsBin.size()));
-    LOG_INFO("module", "AHBot: loaded {} yellow trade goods", uint32(YellowTradeGoodsBin.size()));
-    LOG_INFO("module", "AHBot: loaded {} grey   items"      , uint32(GreyItemsBin.size()));
-    LOG_INFO("module", "AHBot: loaded {} white  items"      , uint32(WhiteItemsBin.size()));
-    LOG_INFO("module", "AHBot: loaded {} green  items"      , uint32(GreenItemsBin.size()));
-    LOG_INFO("module", "AHBot: loaded {} blue   items"      , uint32(BlueItemsBin.size()));
-    LOG_INFO("module", "AHBot: loaded {} purple items"      , uint32(PurpleItemsBin.size()));
-    LOG_INFO("module", "AHBot: loaded {} orange items"      , uint32(OrangeItemsBin.size()));
-    LOG_INFO("module", "AHBot: loaded {} yellow items"      , uint32(YellowItemsBin.size()));
+    LOG_INFO("module", ">>\tgrey\twhite\tgreen\tblue\tpurple\torange\tyellow", uint32(GreyTradeGoodsBin.size()));
+
+    LOG_INFO("module", ">>\t{}\t{}\t{}\t{}\t{}\t{}\t{}\ttrade goods",
+        uint32(GreyTradeGoodsBin.size()),
+        uint32(WhiteTradeGoodsBin.size()),
+        uint32(GreenTradeGoodsBin.size()),
+        uint32(BlueTradeGoodsBin.size()),
+        uint32(PurpleTradeGoodsBin.size()),
+        uint32(OrangeTradeGoodsBin.size()),
+        uint32(YellowTradeGoodsBin.size()));
+
+    LOG_INFO("module", ">>\t{}\t{}\t{}\t{}\t{}\t{}\t{}\titems\n",
+        uint32(GreyItemsBin.size()),
+        uint32(WhiteItemsBin.size()),
+        uint32(GreenItemsBin.size()),
+        uint32(BlueItemsBin.size()),
+        uint32(PurpleItemsBin.size()),
+        uint32(OrangeItemsBin.size()),
+        uint32(YellowItemsBin.size()));
 }
 
 std::set<uint32> AHBConfig::getCommaSeparatedIntegers(std::string text)
