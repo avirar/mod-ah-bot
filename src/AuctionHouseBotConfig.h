@@ -183,6 +183,7 @@ public:
     bool   BuyMethod;
     bool   SellMethod;
     bool   SellAtMarketPrice;
+    bool   SellZeroPriceItems;
     uint32 MarketResetThreshold;
     bool   ConsiderOnlyBotAuctions;
     uint32 ItemsPerCycle;
@@ -197,6 +198,7 @@ public:
     bool   Vendor_TGs;
     bool   Loot_TGs;
     bool   Other_TGs;
+    bool   Profession_Items;
 
     bool   No_Bind;
     bool   Bind_When_Picked_Up;
