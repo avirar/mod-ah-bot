@@ -51,7 +51,6 @@ WHERE (
     NAME LIKE '%world enlarger%' OR 
     NAME LIKE '%tome%' OR 
     NAME LIKE '%ornate spyglass%' OR 
-    NAME LIKE '%test%' OR 
     NAME LIKE '%darkmoon prize%' OR 
     NAME LIKE '%codex%' OR 
     NAME LIKE '%grimoire%' OR 
@@ -66,4 +65,9 @@ WHERE (
 OR UPPER(NAME) LIKE '%OLD%' 
 OR UPPER(NAME) LIKE '%NPC%' 
 OR UPPER(NAME) LIKE '%QA%'
+OR UPPER(NAME) LIKE 'TEST %'
+OR UPPER(NAME) LIKE '% TEST %'
+OR UPPER(NAME) LIKE '% TEST'
+OR UPPER(NAME) LIKE '%(TEST)%'
+OR UPPER(NAME) LIKE '%DEPRECATED%'
 OR (CLASS = 0 AND SUBCLASS = 5 AND REQUIREDLEVEL < 40);
