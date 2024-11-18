@@ -3408,8 +3408,8 @@ void AHBConfig::InitializeBins()
     LOG_INFO("module", ">>\t{:>12}\t{:>12}\t{:>12}\t{:>12}\t{:>12}\t{:>12}\t{:>12}",
         "grey", "white", "green", "blue", "purple", "orange", "yellow");
 
-    // Trade Goods Counts: Right-aligned within 12-character fields
-    LOG_INFO("module", ">>\t{:>12}\t{:>12}\t{:>12}\t{:>12}\t{:>12}\t{:>12}\t{:>12}\ttrade goods",
+    // Trade Goods Counts: Right-aligned within 6-character fields
+    LOG_INFO("module", ">>\t{:>6}\t{:>6}\t{:>6}\t{:>6}\t{:>6}\t{:>6}\t{:>6}\ttrade goods",
         static_cast<uint32>(GreyTradeGoodsBin.size()),
         static_cast<uint32>(WhiteTradeGoodsBin.size()),
         static_cast<uint32>(GreenTradeGoodsBin.size()),
@@ -3418,8 +3418,8 @@ void AHBConfig::InitializeBins()
         static_cast<uint32>(OrangeTradeGoodsBin.size()),
         static_cast<uint32>(YellowTradeGoodsBin.size()));
 
-    // Items Counts: Right-aligned within 12-character fields
-    LOG_INFO("module", ">>\t{:>12}\t{:>12}\t{:>12}\t{:>12}\t{:>12}\t{:>12}\t{:>12}\titems",
+    // Items Counts: Right-aligned within 6-character fields
+    LOG_INFO("module", ">>\t{:>6}\t{:>6}\t{:>6}\t{:>6}\t{:>6}\t{:>6}\t{:>6}\titems",
         static_cast<uint32>(GreyItemsBin.size()),
         static_cast<uint32>(WhiteItemsBin.size()),
         static_cast<uint32>(GreenItemsBin.size()),
