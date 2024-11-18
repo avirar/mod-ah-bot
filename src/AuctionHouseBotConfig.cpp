@@ -2049,7 +2049,7 @@ void AHBConfig::InitializeFromFile()
     MarketResetThreshold           = sConfigMgr->GetOption<uint32>("AuctionHouseBot.MarketResetThreshold"   , 25);
     DuplicatesCount                = sConfigMgr->GetOption<uint32>("AuctionHouseBot.DuplicatesCount"        , 0);
     DivisibleStacks                = sConfigMgr->GetOption<bool>  ("AuctionHouseBot.DivisibleStacks"        , false);
-    ElapsingTimeClass              = sConfigMgr->GetOption<uint32>("AuctionHouseBot.DuplicatesCount"        , 1);
+    ElapsingTimeClass              = sConfigMgr->GetOption<uint32>("AuctionHouseBot.ElapsingTimeClass"      , 1);
     ConsiderOnlyBotAuctions        = sConfigMgr->GetOption<bool>  ("AuctionHouseBot.ConsiderOnlyBotAuctions", false);
     SellZeroPriceItems             = sConfigMgr->GetOption<bool>  ("AuctionHouseBot.SellZeroPriceItems"     , false);
     ItemsPerCycle                  = sConfigMgr->GetOption<uint32>("AuctionHouseBot.ItemsPerCycle"          , 200);
