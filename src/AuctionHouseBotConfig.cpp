@@ -3404,8 +3404,8 @@ void AHBConfig::InitializeBins()
         LOG_INFO("module", ">> Using a whitelist of {} items", uint32(SellerWhiteList.size()));
     }
 
-    // Header: Right-aligned within 12-character fields
-    LOG_INFO("module", ">>\t{:>12}\t{:>12}\t{:>12}\t{:>12}\t{:>12}\t{:>12}\t{:>12}",
+    // Header: Right-aligned within 6-character fields
+    LOG_INFO("module", ">>\t{:>6}\t{:>6}\t{:>6}\t{:>6}\t{:>6}\t{:>6}\t{:>6}",
         "grey", "white", "green", "blue", "purple", "orange", "yellow");
 
     // Trade Goods Counts: Right-aligned within 6-character fields
