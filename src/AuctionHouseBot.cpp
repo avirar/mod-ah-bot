@@ -1030,12 +1030,40 @@ void AuctionHouseBot::Sell(Player* AHBplayer, AHBConfig* config)
 
         noSold++;
 
+
         if (config->TraceSeller)
         {
-            LOG_INFO("module", "AHBot [{}]: New stack ah={}, id={}, stack={}, bid={}, buyout={}", _id, config->GetAHID(), itemID, stackCount, auctionEntry->startbid, auctionEntry->buyout);
+            std::string formattedExpireTime;
+            if (auctionEntry->expire_time == 0)
+            {
+                formattedExpireTime = "Never";
+            }
+            else
+            {
+                std::tm* timeInfo = std::localtime(&auctionEntry->expire_time);
+                if (timeInfo)
+                {
+                    std::ostringstream oss;
+                    oss << std::put_time(timeInfo, "%Y-%m-%d %H:%M:%S");
+                    formattedExpireTime = oss.str();
+                }
+                else
+                {
+                    formattedExpireTime = "Invalid Time";
+                }
+            }
+    
+            // **Log the new auction entry with expire_time**
+            LOG_INFO("module", "AHBot [{}]: New stack ah={}, id={}, stack={}, bid={}, buyout={}, expire_time={}", 
+                _id, 
+                config->GetAHID(), 
+                itemID, 
+                stackCount, 
+                auctionEntry->startbid, 
+                auctionEntry->buyout, 
+                formattedExpireTime);
         }
     }
-
     if (config->TraceSeller)
     {
         LOG_INFO("module", "AHBot [{}]: auctionhouse {}, req={}, sold={}, aboveMin={}, aboveMax={}, loopBrk={}, noNeed={}, tooMany={}, binEmpty={}, err={}", _id, config->GetAHID(), items, noSold, aboveMin, aboveMax, loopBrk, noNeed, tooMany, binEmpty, err);
