@@ -2599,166 +2599,160 @@ void AHBConfig::InitializeBins()
 
         if (itr->second.Bonding == NO_BIND && !No_Bind)
         {
+            LOG_ERROR("module", "AuctionHouseBot: Item {} excluded (NO_BIND items are not allowed)", itr->second.ItemId);
             continue;
         }
-
+        
         if (itr->second.Bonding == BIND_WHEN_PICKED_UP && !Bind_When_Picked_Up)
         {
+            LOG_ERROR("module", "AuctionHouseBot: Item {} excluded (BIND_WHEN_PICKED_UP items are not allowed)", itr->second.ItemId);
             continue;
         }
-
+        
         if (itr->second.Bonding == BIND_WHEN_EQUIPPED && !Bind_When_Equipped)
         {
+            LOG_ERROR("module", "AuctionHouseBot: Item {} excluded (BIND_WHEN_EQUIPPED items are not allowed)", itr->second.ItemId);
             continue;
         }
-
+        
         if (itr->second.Bonding == BIND_WHEN_USE && !Bind_When_Use)
         {
+            LOG_ERROR("module", "AuctionHouseBot: Item {} excluded (BIND_WHEN_USE items are not allowed)", itr->second.ItemId);
             continue;
         }
-
+        
         if (itr->second.Bonding == BIND_QUEST_ITEM && !Bind_Quest_Item)
         {
+            LOG_ERROR("module", "AuctionHouseBot: Item {} excluded (BIND_QUEST_ITEM items are not allowed)", itr->second.ItemId);
             continue;
         }
-
-        //
+        
         // Exclude items with no possible price
-        //
-
         if (!SellZeroPriceItems)
         {
             if (SellMethod)
             {
                 if (itr->second.BuyPrice == 0)
                 {
+                    LOG_ERROR("module", "AuctionHouseBot: Item {} excluded (BuyPrice is 0)", itr->second.ItemId);
                     continue;
                 }
             }
-		 
             else
-		 
-										   
             {
                 if (itr->second.SellPrice == 0)
                 {
+                    LOG_ERROR("module", "AuctionHouseBot: Item {} excluded (SellPrice is 0)", itr->second.ItemId);
                     continue;
                 }
             }
-		 
-
-            //
-            // Exclude items with no costs associated, in any case
-            //
-
+        
             if ((itr->second.BuyPrice == 0) && (itr->second.SellPrice == 0))
             {
+                LOG_ERROR("module", "AuctionHouseBot: Item {} excluded (both BuyPrice and SellPrice are 0)", itr->second.ItemId);
                 continue;
             }
         }
-
-        //
-        // Exlude items superior to the limit quality
-        //
-
+        
+        // Exclude items superior to the limit quality
         if (itr->second.Quality > 6)
         {
+            LOG_ERROR("module", "AuctionHouseBot: Item {} excluded (Quality exceeds limit of 6)", itr->second.ItemId);
             continue;
         }
-
-        //
+        
         // Exclude trade goods items
-        //
-
         if (itr->second.Class == ITEM_CLASS_TRADE_GOODS)
         {
-            bool isNpc   = false;
-            bool isLoot  = false;
+            bool isNpc = false;
+            bool isLoot = false;
             bool exclude = false;
-
+        
             if (NpcItems.find(itr->second.ItemId) != NpcItems.end())
             {
                 isNpc = true;
-
+        
                 if (!Vendor_TGs)
                 {
                     exclude = true;
                 }
             }
-
+        
             if (!exclude)
             {
                 if (LootItems.find(itr->second.ItemId) != LootItems.end())
                 {
                     isLoot = true;
-
+        
                     if (!Loot_TGs)
                     {
                         exclude = true;
                     }
                 }
             }
-
+        
             if (exclude)
             {
+                LOG_ERROR("module", "AuctionHouseBot: Item {} excluded (trade goods not allowed based on settings)", itr->second.ItemId);
                 continue;
             }
-
+        
             if (!Other_TGs)
             {
                 if (!isNpc && !isLoot)
                 {
+                    LOG_ERROR("module", "AuctionHouseBot: Item {} excluded (non-NPC and non-loot trade goods are not allowed)", itr->second.ItemId);
                     continue;
                 }
             }
         }
-
-        //
+        
         // Exclude loot items
-        //
-
         if (itr->second.Class != ITEM_CLASS_TRADE_GOODS)
         {
-            bool isNpc   = false;
-            bool isLoot  = false;
+            bool isNpc = false;
+            bool isLoot = false;
             bool exclude = false;
-
+        
             if (NpcItems.find(itr->second.ItemId) != NpcItems.end())
             {
                 isNpc = true;
-
+        
                 if (!Vendor_Items)
                 {
                     exclude = true;
                 }
             }
-
+        
             if (!exclude)
             {
                 if (LootItems.find(itr->second.ItemId) != LootItems.end())
                 {
                     isLoot = true;
-
+        
                     if (!Loot_Items)
                     {
                         exclude = true;
                     }
                 }
             }
-
+        
             if (exclude)
             {
+                LOG_ERROR("module", "AuctionHouseBot: Item {} excluded (loot items not allowed based on settings)", itr->second.ItemId);
                 continue;
             }
-
+        
             if (!Other_Items)
             {
                 if (!isNpc && !isLoot)
                 {
+                    LOG_ERROR("module", "AuctionHouseBot: Item {} excluded (non-NPC and non-loot items are not allowed)", itr->second.ItemId);
                     continue;
                 }
             }
         }
+
 
         //
         // Verify if the item is disabled or not in the whitelist
@@ -3303,30 +3297,37 @@ void AHBConfig::InitializeBins()
             {
             case AHB_GREY:
                 GreyTradeGoodsBin.insert(itr->second.ItemId);
+                LOG_DEBUG("module", "AuctionHouseBot: Item {} sorted into GreyTradeGoodsBin", itr->second.ItemId);
                 break;
-
+        
             case AHB_WHITE:
                 WhiteTradeGoodsBin.insert(itr->second.ItemId);
+                LOG_DEBUG("module", "AuctionHouseBot: Item {} sorted into WhiteTradeGoodsBin", itr->second.ItemId);
                 break;
-
+        
             case AHB_GREEN:
                 GreenTradeGoodsBin.insert(itr->second.ItemId);
+                LOG_DEBUG("module", "AuctionHouseBot: Item {} sorted into GreenTradeGoodsBin", itr->second.ItemId);
                 break;
-
+        
             case AHB_BLUE:
                 BlueTradeGoodsBin.insert(itr->second.ItemId);
+                LOG_DEBUG("module", "AuctionHouseBot: Item {} sorted into BlueTradeGoodsBin", itr->second.ItemId);
                 break;
-
+        
             case AHB_PURPLE:
                 PurpleTradeGoodsBin.insert(itr->second.ItemId);
+                LOG_DEBUG("module", "AuctionHouseBot: Item {} sorted into PurpleTradeGoodsBin", itr->second.ItemId);
                 break;
-
+        
             case AHB_ORANGE:
                 OrangeTradeGoodsBin.insert(itr->second.ItemId);
+                LOG_DEBUG("module", "AuctionHouseBot: Item {} sorted into OrangeTradeGoodsBin", itr->second.ItemId);
                 break;
-
+        
             case AHB_YELLOW:
                 YellowTradeGoodsBin.insert(itr->second.ItemId);
+                LOG_DEBUG("module", "AuctionHouseBot: Item {} sorted into YellowTradeGoodsBin", itr->second.ItemId);
                 break;
             }
         }
@@ -3336,30 +3337,37 @@ void AHBConfig::InitializeBins()
             {
             case AHB_GREY:
                 GreyItemsBin.insert(itr->second.ItemId);
+                LOG_DEBUG("module", "AuctionHouseBot: Item {} sorted into GreyItemsBin", itr->second.ItemId);
                 break;
-
+        
             case AHB_WHITE:
                 WhiteItemsBin.insert(itr->second.ItemId);
+                LOG_DEBUG("module", "AuctionHouseBot: Item {} sorted into WhiteItemsBin", itr->second.ItemId);
                 break;
-
+        
             case AHB_GREEN:
                 GreenItemsBin.insert(itr->second.ItemId);
+                LOG_DEBUG("module", "AuctionHouseBot: Item {} sorted into GreenItemsBin", itr->second.ItemId);
                 break;
-
+        
             case AHB_BLUE:
                 BlueItemsBin.insert(itr->second.ItemId);
+                LOG_DEBUG("module", "AuctionHouseBot: Item {} sorted into BlueItemsBin", itr->second.ItemId);
                 break;
-
+        
             case AHB_PURPLE:
                 PurpleItemsBin.insert(itr->second.ItemId);
+                LOG_DEBUG("module", "AuctionHouseBot: Item {} sorted into PurpleItemsBin", itr->second.ItemId);
                 break;
-
+        
             case AHB_ORANGE:
                 OrangeItemsBin.insert(itr->second.ItemId);
+                LOG_DEBUG("module", "AuctionHouseBot: Item {} sorted into OrangeItemsBin", itr->second.ItemId);
                 break;
-
+        
             case AHB_YELLOW:
                 YellowItemsBin.insert(itr->second.ItemId);
+                LOG_DEBUG("module", "AuctionHouseBot: Item {} sorted into YellowItemsBin", itr->second.ItemId);
                 break;
             }
         }
