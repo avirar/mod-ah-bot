@@ -18,7 +18,9 @@
  */
 
 #include <ctime>
+#include <iomanip>
 #include <sstream>
+#include <string>
 #include "ObjectMgr.h"
 #include "AuctionHouseMgr.h"
 #include "Config.h"
