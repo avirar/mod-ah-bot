@@ -129,8 +129,11 @@ uint32 AuctionHouseBot::getElapsedTime(uint32 timeClass)
 {
     switch (timeClass)
     {
+    case 3:
+        return urand(600, 259200); // RANDOM = Between 10 minutes and 3 days
+
     case 2:
-        return urand(1, 5) * 600;   // SHORT = In the range of one hour
+        return urand(1, 5) * 600;  // SHORT = In the range of one hour
 
     case 1:
         return urand(1, 23) * 3600; // MEDIUM = In the range of one day
