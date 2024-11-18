@@ -3404,25 +3404,29 @@ void AHBConfig::InitializeBins()
         LOG_INFO("module", ">> Using a whitelist of {} items", uint32(SellerWhiteList.size()));
     }
 
-    LOG_INFO("module", ">>\tgrey\twhite\tgreen\tblue\tpurple\torange\tyellow", uint32(GreyTradeGoodsBin.size()));
+    // Header: Right-aligned within 12-character fields
+    LOG_INFO("module", ">>\t{:>12}\t{:>12}\t{:>12}\t{:>12}\t{:>12}\t{:>12}\t{:>12}",
+        "grey", "white", "green", "blue", "purple", "orange", "yellow");
 
-    LOG_INFO("module", ">>\t{}\t{}\t{}\t{}\t{}\t{}\t{}\ttrade goods",
-        uint32(GreyTradeGoodsBin.size()),
-        uint32(WhiteTradeGoodsBin.size()),
-        uint32(GreenTradeGoodsBin.size()),
-        uint32(BlueTradeGoodsBin.size()),
-        uint32(PurpleTradeGoodsBin.size()),
-        uint32(OrangeTradeGoodsBin.size()),
-        uint32(YellowTradeGoodsBin.size()));
+    // Trade Goods Counts: Right-aligned within 12-character fields
+    LOG_INFO("module", ">>\t{:>12}\t{:>12}\t{:>12}\t{:>12}\t{:>12}\t{:>12}\t{:>12}\ttrade goods",
+        static_cast<uint32>(GreyTradeGoodsBin.size()),
+        static_cast<uint32>(WhiteTradeGoodsBin.size()),
+        static_cast<uint32>(GreenTradeGoodsBin.size()),
+        static_cast<uint32>(BlueTradeGoodsBin.size()),
+        static_cast<uint32>(PurpleTradeGoodsBin.size()),
+        static_cast<uint32>(OrangeTradeGoodsBin.size()),
+        static_cast<uint32>(YellowTradeGoodsBin.size()));
 
-    LOG_INFO("module", ">>\t{}\t{}\t{}\t{}\t{}\t{}\t{}\titems\n",
-        uint32(GreyItemsBin.size()),
-        uint32(WhiteItemsBin.size()),
-        uint32(GreenItemsBin.size()),
-        uint32(BlueItemsBin.size()),
-        uint32(PurpleItemsBin.size()),
-        uint32(OrangeItemsBin.size()),
-        uint32(YellowItemsBin.size()));
+    // Items Counts: Right-aligned within 12-character fields
+    LOG_INFO("module", ">>\t{:>12}\t{:>12}\t{:>12}\t{:>12}\t{:>12}\t{:>12}\t{:>12}\titems",
+        static_cast<uint32>(GreyItemsBin.size()),
+        static_cast<uint32>(WhiteItemsBin.size()),
+        static_cast<uint32>(GreenItemsBin.size()),
+        static_cast<uint32>(BlueItemsBin.size()),
+        static_cast<uint32>(PurpleItemsBin.size()),
+        static_cast<uint32>(OrangeItemsBin.size()),
+        static_cast<uint32>(YellowItemsBin.size()));
 }
 
 std::set<uint32> AHBConfig::getCommaSeparatedIntegers(std::string text)
