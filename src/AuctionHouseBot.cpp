@@ -917,7 +917,7 @@ void AuctionHouseBot::Sell(Player* AHBplayer, AHBConfig* config)
         if (maxStackConfig > 1 && itemMaxStack > 1)
         {
             // Use the minimum of the configured max stack and the item's max stack count
-            stackCount = std::min(getStackCount(config, itemMaxStack), (int)maxStackConfig);
+            stackCount = std::min(getStackCount(config, itemMaxStack), maxStackConfig);
         }
         else if (maxStackConfig == 0 && itemMaxStack > 1)
         {
