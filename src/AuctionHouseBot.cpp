@@ -916,25 +916,25 @@ void AuctionHouseBot::Sell(Player* AHBplayer, AHBConfig* config)
         
                 switch (prototype->Quality)
                 {
-                    case QUALITY_GREY:
+                    case ITEM_QUALITY_POOR:
                         qualityMultiplier = 1;
                         break;
-                    case QUALITY_WHITE:
+                    case ITEM_QUALITY_NORMAL:
                         qualityMultiplier = 2;
                         break;
-                    case QUALITY_GREEN:
+                    case ITEM_QUALITY_UNCOMMON:
                         qualityMultiplier = 5;
                         break;
-                    case QUALITY_BLUE:
+                    case ITEM_QUALITY_RARE:
                         qualityMultiplier = 10;
                         break;
-                    case QUALITY_PURPLE:
+                    case ITEM_QUALITY_EPIC:
                         qualityMultiplier = 20;
                         break;
-                    case QUALITY_ORANGE:
+                    case ITEM_QUALITY_LEGENDARY:
                         qualityMultiplier = 50;
                         break;
-                    case QUALITY_YELLOW:
+                    case ITEM_QUALITY_ARTIFACT:
                         qualityMultiplier = 50;
                         break;
                     default:
