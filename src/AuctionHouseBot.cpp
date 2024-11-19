@@ -908,24 +908,64 @@ void AuctionHouseBot::Sell(Player* AHBplayer, AHBConfig* config)
         {
             if (buyoutPrice == 0)
             {
-                buyoutPrice = urand(prototype->ItemLevel, prototype->ItemLevel + 10) * 10;
-
+                // Step 1: Calculate base price based on item level
+                int basePrice = urand(prototype->ItemLevel, prototype->ItemLevel + 10) * 10;
+        
+                // Step 2: Determine the quality multiplier
+                int qualityMultiplier = 1; // Default multiplier
+        
+                switch (prototype->Quality)
+                {
+                    case QUALITY_GREY:
+                        qualityMultiplier = 1;
+                        break;
+                    case QUALITY_WHITE:
+                        qualityMultiplier = 2;
+                        break;
+                    case QUALITY_GREEN:
+                        qualityMultiplier = 5;
+                        break;
+                    case QUALITY_BLUE:
+                        qualityMultiplier = 10;
+                        break;
+                    case QUALITY_PURPLE:
+                        qualityMultiplier = 20;
+                        break;
+                    case QUALITY_ORANGE:
+                        qualityMultiplier = 50;
+                        break;
+                    case QUALITY_YELLOW:
+                        qualityMultiplier = 50;
+                        break;
+                    default:
+                        // Handle unknown quality, possibly set to a default multiplier
+                        qualityMultiplier = 1; // Example default
+                        break;
+                }
+        
+                // Step 3: Apply the quality multiplier to the base price
+                buyoutPrice = basePrice * qualityMultiplier;
+        
+                // Optional: Adjust scaling if necessary
+                buyoutPrice = buyoutPrice / 100;
+        
                 if (buyoutPrice <= 0)
                 {
                     if (config->DebugOutSeller)
                     {
                         LOG_ERROR("module", "AHBot [{}]: Could not determine a price for item {} of quality {} (min={}, max={})", _id, itemID, prototype->Quality, config->GetMinPrice(prototype->Quality), config->GetMaxPrice(prototype->Quality));
                     }
-
+        
                     item->RemoveFromUpdateQueueOf(AHBplayer);
                     continue;
                 }
             }
         }
-
-
+        
+        // Continue with the existing price adjustment
         buyoutPrice = buyoutPrice * urand(config->GetMinPrice(prototype->Quality), config->GetMaxPrice(prototype->Quality));
         buyoutPrice = buyoutPrice / 100;
+
 
         bidPrice    = buyoutPrice * urand(config->GetMinBidPrice(prototype->Quality), config->GetMaxBidPrice(prototype->Quality));
         bidPrice    = bidPrice / 100;
