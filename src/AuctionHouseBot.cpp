@@ -911,16 +911,52 @@ void AuctionHouseBot::Sell(Player* AHBplayer, AHBConfig* config)
         // Determine the stack size
         // 
 
-        if (config->GetMaxStack(prototype->Quality) > 1 && item->GetMaxStackCount() > 1)
+        uint32 maxStackConfig = config->GetMaxStack(prototype->Quality);
+        uint32 itemMaxStack = item->GetMaxStackCount();
+    
+        if (maxStackConfig > 1 && itemMaxStack > 1)
         {
-            stackCount = minValue(getStackCount(config, item->GetMaxStackCount()), config->GetMaxStack(prototype->Quality));
+            // Use the minimum of the configured max stack and the item's max stack count
+            stackCount = std::min(getStackCount(config, itemMaxStack), (int)maxStackConfig);
         }
-        else if (config->GetMaxStack(prototype->Quality) == 0 && item->GetMaxStackCount() > 1)
+        else if (maxStackConfig == 0 && itemMaxStack > 1)
         {
-            stackCount = getStackCount(config, item->GetMaxStackCount());
+            // Determine stackCount based on the item's quality
+            switch (prototype->Quality)
+            {
+                // Use Maxstack size for white and green item
+                case ITEM_QUALITY_NORMAL:    // WHITE
+                case ITEM_QUALITY_UNCOMMON:  // GREEN
+                    stackCount = itemMaxStack;
+                    break;
+
+                case ITEM_QUALITY_RARE:      // BLUE
+                    // If divisible by 2, use half; otherwise, use full
+                    if (itemMaxStack % 2 == 0)
+                        stackCount = itemMaxStack / 2;
+                    else
+                        stackCount = itemMaxStack;
+                    break;
+    
+                case ITEM_QUALITY_EPIC:      // PURPLE
+                    // If divisible by 4, use quarter; otherwise, use full
+                    if (itemMaxStack % 4 == 0)
+                        stackCount = itemMaxStack / 4;
+                    else
+                        stackCount = itemMaxStack;
+                    break;
+    
+                // You can add more cases here for other qualities if needed
+                
+                default:
+                    // For qualities like LEGENDARY, ARTIFACT, HEIRLOOM, etc., default to full stack count
+                    stackCount = 1;
+                    break;
+            }
         }
         else
         {
+            // Default stack count
             stackCount = 1;
         }
 
