@@ -719,34 +719,52 @@ void AuctionHouseBot::Sell(Player* AHBplayer, AHBConfig* config)
                 itemID = getElement(config->GreenTradeGoodsBin, urand(0, config->GreenTradeGoodsBin.size() - 1), _id, config->DuplicatesCount, auctionHouse);
             }
 
-            // Rare
+            // Rare (Blue Items), config->DuplicatesCount / 2
 
-            if (itemID == 0 && (config->BlueItemsBin.size() > 0) && (blueItems < blueIcount))
+            if (itemID == 0 && !config->BlueItemsBin.empty() && (blueItems < blueIcount))
             {
                 choice = 3;
-                itemID = getElement(config->BlueItemsBin, urand(0, config->BlueItemsBin.size() - 1), _id, config->DuplicatesCount, auctionHouse);
+        
+                // Calculate adjusted DuplicatesCount for Blue Items
+                int adjustedDuplicates = (config->DuplicatesCount % 2 == 0) ? (config->DuplicatesCount / 2) : config->DuplicatesCount;
+        
+                itemID = getElement(config->BlueItemsBin, urand(0, config->BlueItemsBin.size() - 1), _id, adjustedDuplicates, auctionHouse);
             }
-
-            if (itemID == 0 && (config->BlueTradeGoodsBin.size() > 0) && (blueTGoods < blueTGcount))
+        
+            // Blue Trade Goods Bin
+            if (itemID == 0 && !config->BlueTradeGoodsBin.empty() && (blueTGoods < blueTGcount))
             {
                 choice = 10;
-                itemID = getElement(config->BlueTradeGoodsBin, urand(0, config->BlueTradeGoodsBin.size() - 1), _id, config->DuplicatesCount, auctionHouse);
+        
+                // Calculate adjusted DuplicatesCount for Blue Trade Goods
+                int adjustedDuplicates = (config->DuplicatesCount % 2 == 0) ? (config->DuplicatesCount / 2) : config->DuplicatesCount;
+        
+                itemID = getElement(config->BlueTradeGoodsBin, urand(0, config->BlueTradeGoodsBin.size() - 1), _id, adjustedDuplicates, auctionHouse);
             }
-
-            // Epic
-
-            if (itemID == 0 && (config->PurpleItemsBin.size() > 0) && (purpleItems < purpleIcount))
+        
+            // Epic (Purple Items), config->DuplicatesCount / 4
+        
+            // Purple Items Bin
+            if (itemID == 0 && !config->PurpleItemsBin.empty() && (purpleItems < purpleIcount))
             {
                 choice = 4;
-                itemID = getElement(config->PurpleItemsBin, urand(0, config->PurpleItemsBin.size() - 1), _id, config->DuplicatesCount, auctionHouse);
+        
+                // Calculate adjusted DuplicatesCount for Epic Items
+                int adjustedDuplicates = (config->DuplicatesCount % 4 == 0) ? (config->DuplicatesCount / 4) : config->DuplicatesCount;
+        
+                itemID = getElement(config->PurpleItemsBin, urand(0, config->PurpleItemsBin.size() - 1), _id, adjustedDuplicates, auctionHouse);
             }
-
-            if (itemID == 0 && (config->PurpleTradeGoodsBin.size() > 0) && (purpleTGoods < purpleTGcount))
+        
+            // Purple Trade Goods Bin
+            if (itemID == 0 && !config->PurpleTradeGoodsBin.empty() && (purpleTGoods < purpleTGcount))
             {
                 choice = 11;
-                itemID = getElement(config->PurpleTradeGoodsBin, urand(0, config->PurpleTradeGoodsBin.size() - 1), _id, config->DuplicatesCount, auctionHouse);
+        
+                // Calculate adjusted DuplicatesCount for Epic Trade Goods
+                int adjustedDuplicates = (config->DuplicatesCount % 4 == 0) ? (config->DuplicatesCount / 4) : config->DuplicatesCount;
+        
+                itemID = getElement(config->PurpleTradeGoodsBin, urand(0, config->PurpleTradeGoodsBin.size() - 1), _id, adjustedDuplicates, auctionHouse);
             }
-
             // Legendary
 
             if (itemID == 0 && (config->OrangeItemsBin.size() > 0) && (orangeItems < orangeIcount))
