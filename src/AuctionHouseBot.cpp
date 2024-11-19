@@ -607,11 +607,16 @@ void AuctionHouseBot::Sell(Player* AHBplayer, AHBConfig* config)
         return;
     }
 
-    if ((maxItems - auctions) >= config->ItemsPerCycle)
+    if (auctions == 0) 
+    {
+        // If no bot auctions exist, populate the auction house up to minItems
+        items = minItems;
+    } 
+    else if ((maxItems - auctions) >= config->ItemsPerCycle) 
     {
         items = config->ItemsPerCycle;
-    }
-    else
+    } 
+    else 
     {
         items = (maxItems - auctions);
     }
