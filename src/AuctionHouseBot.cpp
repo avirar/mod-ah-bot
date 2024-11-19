@@ -53,7 +53,7 @@ AuctionHouseBot::~AuctionHouseBot()
     // Nothing
 }
 
-uint32 AuctionHouseBot::getElement(std::set<uint32> set, int index, uint32 botId, uint32 maxDup, AuctionHouseObject* auctionHouse)
+uint32 AuctionHouseBot::getElement(const std::set<uint32>& set, int index, uint32 botId, uint32 maxDup, AuctionHouseObject* auctionHouse)
 {
     std::set<uint32>::iterator it = set.begin();
     std::advance(it, index);
