@@ -110,8 +110,8 @@ AuctionHouseBot.DEBUG_SELLER = 0
 AuctionHouseBot.TRACE_SELLER = 0
 AuctionHouseBot.TRACE_BUYER = 0
 
-AuctionHouseBot.EnableSeller = 0
-AuctionHouseBot.EnableBuyer = 0
+AuctionHouseBot.EnableSeller = 1
+AuctionHouseBot.EnableBuyer = 1
 AuctionHouseBot.UseBuyPriceForSeller = 0
 AuctionHouseBot.UseBuyPriceForBuyer = 0
 AuctionHouseBot.UseMarketPriceForSeller = 0
@@ -120,10 +120,10 @@ AuctionHouseBot.Account = 0
 AuctionHouseBot.GUID = 0
 AuctionHouseBot.ItemsPerCycle = 200
 AuctionHouseBot.ConsiderOnlyBotAuctions = 0
-AuctionHouseBot.DuplicatesCount = 0
+AuctionHouseBot.DuplicatesCount = 20
 AuctionHouseBot.DivisibleStacks = 0
 AuctionHouseBot.ElapsingTimeClass = 1
-AuctionHouseBot.SellZeroPriceItems = 0
+AuctionHouseBot.SellZeroPriceItems = 1
 
 ###############################################################################
 # AUCTION HOUSE BOT FILTERS PART 1
@@ -210,13 +210,13 @@ AuctionHouseBot.SellZeroPriceItems = 0
 #
 ###############################################################################
 
-AuctionHouseBot.VendorItems = 0
-AuctionHouseBot.VendorTradeGoods = 0
+AuctionHouseBot.VendorItems = 1
+AuctionHouseBot.VendorTradeGoods = 1
 AuctionHouseBot.LootItems = 1
 AuctionHouseBot.LootTradeGoods = 1
-AuctionHouseBot.OtherItems = 0
-AuctionHouseBot.OtherTradeGoods = 0
-AuctionHouseBot.ProfessionItems = 0
+AuctionHouseBot.OtherItems = 1
+AuctionHouseBot.OtherTradeGoods = 1
+AuctionHouseBot.ProfessionItems = 1
 AuctionHouseBot.No_Bind = 1
 AuctionHouseBot.Bind_When_Picked_Up = 0
 AuctionHouseBot.Bind_When_Equipped = 1
