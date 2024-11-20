@@ -7,7 +7,7 @@ CREATE TABLE `mod_auctionhousebot` (
   `auctionhouse` int(11) NOT NULL DEFAULT '0' COMMENT 'mapID of the auctionhouse.',
   `name` char(25) DEFAULT NULL COMMENT 'Text name of the auctionhouse.',
   `minitems` int(11) DEFAULT '0' COMMENT 'This is the minimum number of items you want to keep in the auction house. a 0 here will make it the same as the maximum.',
-  `maxitems` int(11) DEFAULT '0' COMMENT 'This is the number of items you want to keep in the auction house.',
+  `maxitems` int(11) DEFAULT '50000' COMMENT 'This is the number of items you want to keep in the auction house.',
   `percentgreytradegoods` int(11) DEFAULT '0' COMMENT 'Sets the percentage of the Grey Trade Goods auction items',
   `percentwhitetradegoods` int(11) DEFAULT '27' COMMENT 'Sets the percentage of the White Trade Goods auction items',
   `percentgreentradegoods` int(11) DEFAULT '12' COMMENT 'Sets the percentage of the Green Trade Goods auction items',
@@ -16,8 +16,8 @@ CREATE TABLE `mod_auctionhousebot` (
   `percentorangetradegoods` int(11) DEFAULT '0' COMMENT 'Sets the percentage of the Orange Trade Goods auction items',
   `percentyellowtradegoods` int(11) DEFAULT '0' COMMENT 'Sets the percentage of the Yellow Trade Goods auction items',
   `percentgreyitems` int(11) DEFAULT '0' COMMENT 'Sets the percentage of the non trade Grey auction items',
-  `percentwhiteitems` int(11) DEFAULT '10' COMMENT 'Sets the percentage of the non trade White auction items',
-  `percentgreenitems` int(11) DEFAULT '30' COMMENT 'Sets the percentage of the non trade Green auction items',
+  `percentwhiteitems` int(11) DEFAULT '15' COMMENT 'Sets the percentage of the non trade White auction items',
+  `percentgreenitems` int(11) DEFAULT '25' COMMENT 'Sets the percentage of the non trade Green auction items',
   `percentblueitems` int(11) DEFAULT '8' COMMENT 'Sets the percentage of the non trade Blue auction items',
   `percentpurpleitems` int(11) DEFAULT '2' COMMENT 'Sets the percentage of the non trade Purple auction items',
   `percentorangeitems` int(11) DEFAULT '0' COMMENT 'Sets the percentage of the non trade Orange auction items',
@@ -75,9 +75,9 @@ CREATE TABLE `mod_auctionhousebot` (
 
 INSERT INTO `mod_auctionhousebot` (`auctionhouse`, `name`, `minitems`, `maxitems`, `percentgreytradegoods`, `percentwhitetradegoods`, `percentgreentradegoods`, `percentbluetradegoods`, `percentpurpletradegoods`, `percentorangetradegoods`, `percentyellowtradegoods`, `percentgreyitems`, `percentwhiteitems`, `percentgreenitems`, `percentblueitems`, `percentpurpleitems`, `percentorangeitems`, `percentyellowitems`, `minpricegrey`, `maxpricegrey`, `minpricewhite`, `maxpricewhite`, `minpricegreen`, `maxpricegreen`, `minpriceblue`, `maxpriceblue`, `minpricepurple`, `maxpricepurple`, `minpriceorange`, `maxpriceorange`, `minpriceyellow`, `maxpriceyellow`, `minbidpricegrey`, `maxbidpricegrey`, `minbidpricewhite`, `maxbidpricewhite`, `minbidpricegreen`, `maxbidpricegreen`, `minbidpriceblue`, `maxbidpriceblue`, `minbidpricepurple`, `maxbidpricepurple`, `minbidpriceorange`, `maxbidpriceorange`, `minbidpriceyellow`, `maxbidpriceyellow`, `maxstackgrey`, `maxstackwhite`, `maxstackgreen`, `maxstackblue`, `maxstackpurple`, `maxstackorange`, `maxstackyellow`, `buyerpricegrey`, `buyerpricewhite`, `buyerpricegreen`, `buyerpriceblue`, `buyerpricepurple`, `buyerpriceorange`, `buyerpriceyellow`, `buyerbiddinginterval`, `buyerbidsperinterval`)
 VALUES
-(2,'Alliance',250,250,0,27,12,10,1,0,0,0,10,30,8,2,0,0,100,150,150,250,800,1400,1250,1750,2250,4550,3250,5550,5250,6550,70,100,70,100,80,100,75,100,80,100,80,100,80,100,0,0,3,2,1,1,1,1,3,5,12,15,20,22,1,1),
-(6,'Horde',250,250,0,27,12,10,1,0,0,0,10,30,8,2,0,0,100,150,150,250,800,1400,1250,1750,2250,4550,3250,5550,5250,6550,70,100,70,100,80,100,75,100,80,100,80,100,80,100,0,0,3,2,1,1,1,1,3,5,12,15,20,22,1,1),
-(7,'Neutral',250,250,0,27,12,10,1,0,0,0,10,30,8,2,0,0,100,150,150,250,800,1400,1250,1750,2250,4550,3250,5550,5250,6550,70,100,70,100,80,100,75,100,80,100,80,100,80,100,0,0,3,2,1,1,1,1,3,5,12,15,20,22,1,1);
+(2,'Alliance',50000,50000,0,27,12,10,1,0,0,0,15,25,8,2,0,0,100,150,150,250,800,1400,1250,1750,2250,4550,3250,5550,5250,6550,70,100,70,100,80,100,75,100,80,100,80,100,80,100,0,0,3,2,1,1,1,1,3,5,12,15,20,22,1,1),
+(6,'Horde',50000,50000,0,27,12,10,1,0,0,0,15,25,8,2,0,0,100,150,150,250,800,1400,1250,1750,2250,4550,3250,5550,5250,6550,70,100,70,100,80,100,75,100,80,100,80,100,80,100,0,0,3,2,1,1,1,1,3,5,12,15,20,22,1,1),
+(7,'Neutral',50000,50000,0,27,12,10,1,0,0,0,15,25,8,2,0,0,100,150,150,250,800,1400,1250,1750,2250,4550,3250,5550,5250,6550,70,100,70,100,80,100,75,100,80,100,80,100,80,100,0,0,3,2,1,1,1,1,3,5,12,15,20,22,1,1);
 
 --
 -- Items blacklist
@@ -375,4 +375,30 @@ VALUES
 (53507), (53508), (53509), (54592), (50315), (50318), (50319), (52567), (50815), (53889), (53890), (54069), (54860), (50840), (53891), (53924),
 (51997), (51998), (54847), (54857), (56806), (54212), (54452), (54810), (50093), (54822), (50289), (50301), (50307), (52189), (52202), (52272),
 (52275), (52276), (52345), (52562), (52563), (52565), (52729), (53510), (54218), (54455), (54467), (50248), (50431), (52011), (52062), (54291),
-(54470);
+(54470), (38), (40), (41), (42), (43), (45), (46), (47), (49), (50), (51), (53), (54), (55), (58), (59), (86), (87), (89), (90), (92), (93), 
+(94), (95), (98), (99), (101), (102), (103), (105), (114), (115), (119), (121), (122), (123), (125), (126), (127), (129), (130), (131), (132), 
+(133), (134), (136), (137), (138), (140), (141), (146), (148), (149), (151), (152), (154), (155), (157), (746), (859), (941), (964), (996), 
+(1122), (1123), (1124), (1254), (1403), (1622), (2105), (2410), (2478), (2562), (2575), (2576), (2577), (2579), (2587), (2804), (2919), (2920), 
+(2921), (2922), (2923), (3001), (3002), (3003), (3004), (3005), (3006), (3015), (3147), (3149), (3342), (3360), (3419), (3420), (3421), (3422), 
+(3423), (3424), (3426), (3427), (3428), (3557), (3788), (3789), (3790), (3791), (4030), (4031), (4032), (4033), (4330), (4332), (4333), (4334), 
+(4335), (4336), (4344), (4750), (4760), (4762), (5090), (5091), (5107), (5222), (5226), (5230), (5231), (5408), (5409), (5411), (5514), (5522), 
+(5976), (6096), (6097), (6117), (6120), (6122), (6125), (6127), (6130), (6134), (6136), (6138), (6182), (6384), (6385), (6786), (6787), (6795), 
+(6796), (6833), (6837), (7297), (7337), (7338), (7339), (7340), (7341), (7342), (7725), (7809), (8624), (8625), (8626), (10034), (10052), 
+(10053), (10054), (10055), (10056), (10515), (10555), (10585), (10587), (10645), (10723), (10725), (10727), (11170), (11364), (11522), (11840), 
+(12442), (12443), (12846), (13602), (13603), (13699), (13700), (13701), (13895), (13896), (13897), (13898), (13899), (13900), (14617), (15196), 
+(15197), (15198), (15199), (16034), (16036), (16037), (16059), (16060), (17723), (18161), (18162), (18163), (18164), (18165), (18231), (19028), 
+(19031), (19032), (19160), (19295), (19505), (19506), (19697), (20131), (20132), (20391), (20392), (20561), (20562), (20563), (20564), (20565), 
+(20566), (20567), (20568), (20569), (20570), (20571), (20572), (20573), (20574), (20895), (21039), (21040), (21157), (21419), (21420), (21421), 
+(21422), (21423), (21424), (21425), (21426), (21427), (21428), (21429), (21430), (21431), (21432), (21433), (21434), (21435), (21437), (21439), 
+(21440), (21441), (21442), (21443), (21444), (21445), (21446), (21447), (21448), (21449), (21450), (21451), (21538), (21539), (21541), (21542), 
+(21543), (21544), (22128), (22276), (22277), (22278), (22279), (22280), (22281), (22282), (22646), (22999), (23324), (23345), (23348), (23473), 
+(23475), (23476), (23710), (23717), (23909), (23999), (24004), (24344), (25549), (27940), (27941), (27944), (27945), (27976), (27978), (27979), 
+(27982), (27992), (28788), (30719), (30721), (31279), (31773), (31774), (31775), (31776), (31777), (31778), (31779), (31780), (31781), (31804), 
+(32445), (32828), (32972), (33012), (33014), (33047), (33105), (33862), (33863), (33864), (33868), (33966), (33967), (33968), (33969), (34000), 
+(34001), (34002), (34003), (34008), (34158), (34187), (34249), (34683), (34685), (34718), (34826), (34827), (34828), (34829), (35221), (36896), 
+(36897), (37934), (38090), (38091), (38160), (38161), (38162), (38163), (38285), (38286), (41248), (41249), (41250), (41251), (41252), (41253), 
+(41254), (41255), (42360), (42361), (42363), (42365), (42368), (42369), (42370), (42371), (42372), (42373), (42374), (42375), (42376), (42377), 
+(42378), (43154), (43155), (43156), (43157), (43327), (43486), (43499), (44647), (44648), (44678), (44679), (44692), (44693), (44694), (44737), 
+(44785), (44788), (44800), (44802), (44803), (45067), (45574), (45577), (45578), (45579), (45580), (45581), (45582), (45583), (45584), (45585), 
+(45664), (45666), (45667), (45668), (45669), (45670), (45671), (45672), (45673), (45674), (45860), (45998), (46723), (46735), (46800), (46817), 
+(46818), (46824), (46860), (46861), (49278), (49916);
