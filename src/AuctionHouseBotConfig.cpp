@@ -2599,31 +2599,46 @@ void AHBConfig::InitializeBins()
 
         if (itr->second.Bonding == NO_BIND && !No_Bind)
         {
-            LOG_ERROR("module", "AuctionHouseBot: Item {} excluded (NO_BIND items are not allowed)", itr->second.ItemId);
+            if (DebugOutFilters)
+            {
+                LOG_INFO("module", "AuctionHouseBot: Item {} disabled (NO_BIND items are not allowed)", itr->second.ItemId);
+            }
             continue;
         }
         
         if (itr->second.Bonding == BIND_WHEN_PICKED_UP && !Bind_When_Picked_Up)
         {
-            LOG_ERROR("module", "AuctionHouseBot: Item {} excluded (BIND_WHEN_PICKED_UP items are not allowed)", itr->second.ItemId);
+            if (DebugOutFilters)
+            {
+                LOG_INFO("module", "AuctionHouseBot: Item {} disabled (BIND_WHEN_PICKED_UP items are not allowed)", itr->second.ItemId);
+            }
             continue;
         }
         
         if (itr->second.Bonding == BIND_WHEN_EQUIPPED && !Bind_When_Equipped)
         {
-            LOG_ERROR("module", "AuctionHouseBot: Item {} excluded (BIND_WHEN_EQUIPPED items are not allowed)", itr->second.ItemId);
+            if (DebugOutFilters)
+            {
+                LOG_INFO("module", "AuctionHouseBot: Item {} disabled (BIND_WHEN_EQUIPPED items are not allowed)", itr->second.ItemId);
+            }
             continue;
         }
         
         if (itr->second.Bonding == BIND_WHEN_USE && !Bind_When_Use)
         {
-            LOG_ERROR("module", "AuctionHouseBot: Item {} excluded (BIND_WHEN_USE items are not allowed)", itr->second.ItemId);
+            if (DebugOutFilters)
+            {
+                LOG_INFO("module", "AuctionHouseBot: Item {} disabled (BIND_WHEN_USE items are not allowed)", itr->second.ItemId);
+            }
             continue;
         }
         
         if (itr->second.Bonding == BIND_QUEST_ITEM && !Bind_Quest_Item)
         {
-            LOG_ERROR("module", "AuctionHouseBot: Item {} excluded (BIND_QUEST_ITEM items are not allowed)", itr->second.ItemId);
+            if (DebugOutFilters)
+            {
+                LOG_INFO("module", "AuctionHouseBot: Item {} disabled (BIND_QUEST_ITEM items are not allowed)", itr->second.ItemId);
+            }
             continue;
         }
         
@@ -2634,7 +2649,10 @@ void AHBConfig::InitializeBins()
             {
                 if (itr->second.BuyPrice == 0)
                 {
-                    LOG_ERROR("module", "AuctionHouseBot: Item {} excluded (BuyPrice is 0)", itr->second.ItemId);
+                    if (DebugOutFilters)
+                    {
+                        LOG_INFO("module", "AuctionHouseBot: Item {} disabled (BuyPrice is 0)", itr->second.ItemId);
+                    }
                     continue;
                 }
             }
@@ -2642,14 +2660,20 @@ void AHBConfig::InitializeBins()
             {
                 if (itr->second.SellPrice == 0)
                 {
-                    LOG_ERROR("module", "AuctionHouseBot: Item {} excluded (SellPrice is 0)", itr->second.ItemId);
+                    if (DebugOutFilters)
+                    {
+                        LOG_INFO("module", "AuctionHouseBot: Item {} disabled (SellPrice is 0)", itr->second.ItemId);
+                    }
                     continue;
                 }
             }
         
             if ((itr->second.BuyPrice == 0) && (itr->second.SellPrice == 0))
             {
-                LOG_ERROR("module", "AuctionHouseBot: Item {} excluded (both BuyPrice and SellPrice are 0)", itr->second.ItemId);
+                if (DebugOutFilters)
+                {
+                    LOG_INFO("module", "AuctionHouseBot: Item {} disabled (both BuyPrice and SellPrice are 0)", itr->second.ItemId);
+                }
                 continue;
             }
         }
@@ -2657,7 +2681,10 @@ void AHBConfig::InitializeBins()
         // Exclude items superior to the limit quality
         if (itr->second.Quality > 6)
         {
-            LOG_ERROR("module", "AuctionHouseBot: Item {} excluded (Quality exceeds limit of 6)", itr->second.ItemId);
+            if (DebugOutFilters)
+            {
+                LOG_INFO("module", "AuctionHouseBot: Item {} disabled (Quality exceeds limit of 6)", itr->second.ItemId);
+            }
             continue;
         }
         
@@ -2693,7 +2720,10 @@ void AHBConfig::InitializeBins()
         
             if (exclude)
             {
-                LOG_ERROR("module", "AuctionHouseBot: Item {} excluded (trade goods not allowed based on settings)", itr->second.ItemId);
+                if (DebugOutFilters)
+                {
+                    LOG_INFO("module", "AuctionHouseBot: Item {} disabled (trade goods not allowed based on settings)", itr->second.ItemId);
+                }
                 continue;
             }
         
@@ -2701,7 +2731,10 @@ void AHBConfig::InitializeBins()
             {
                 if (!isNpc && !isLoot)
                 {
-                    LOG_ERROR("module", "AuctionHouseBot: Item {} excluded (non-NPC and non-loot trade goods are not allowed)", itr->second.ItemId);
+                    if (DebugOutFilters)
+                    {
+                        LOG_INFO("module", "AuctionHouseBot: Item {} disabled (non-NPC and non-loot trade goods are not allowed)", itr->second.ItemId);
+                    }
                     continue;
                 }
             }
@@ -2739,7 +2772,10 @@ void AHBConfig::InitializeBins()
         
             if (exclude)
             {
-                LOG_ERROR("module", "AuctionHouseBot: Item {} excluded (loot items not allowed based on settings)", itr->second.ItemId);
+                if (DebugOutFilters)
+                {
+                    LOG_INFO("module", "AuctionHouseBot: Item {} disabled (loot items not allowed based on settings)", itr->second.ItemId);
+                }
                 continue;
             }
         
@@ -2747,11 +2783,15 @@ void AHBConfig::InitializeBins()
             {
                 if (!isNpc && !isLoot)
                 {
-                    LOG_ERROR("module", "AuctionHouseBot: Item {} excluded (non-NPC and non-loot items are not allowed)", itr->second.ItemId);
+                    if (DebugOutFilters)
+                    {
+                        LOG_INFO("module", "AuctionHouseBot: Item {} disabled (non-NPC and non-loot items are not allowed)", itr->second.ItemId);
+                    }
                     continue;
                 }
             }
         }
+
 
 
         //
@@ -2764,7 +2804,7 @@ void AHBConfig::InitializeBins()
             {
                 if (DebugOutFilters)
                 {
-                    LOG_ERROR("module", "AuctionHouseBot: Item {} disabled (PTR/Beta/Unused Item)", itr->second.ItemId);
+                    LOG_INFO("module", "AuctionHouseBot: Item {} disabled (PTR/Beta/Unused Item)", itr->second.ItemId);
                 }
 
                 continue;
@@ -2776,7 +2816,7 @@ void AHBConfig::InitializeBins()
             {
                 if (DebugOutFilters)
                 {
-                    LOG_ERROR("module", "AuctionHouseBot: Item {} disabled (not in the whitelist)", itr->second.ItemId);
+                    LOG_INFO("module", "AuctionHouseBot: Item {} disabled (not in the whitelist)", itr->second.ItemId);
                 }
 
                 continue;
@@ -2791,7 +2831,7 @@ void AHBConfig::InitializeBins()
         {
             if (DebugOutFilters)
             {
-                LOG_ERROR("module", "AuctionHouseBot: Item {} disabled (Permanent Enchant Item)", itr->second.ItemId);
+                LOG_INFO("module", "AuctionHouseBot: Item {} disabled (Permanent Enchant Item)", itr->second.ItemId);
             }
 
             continue;
@@ -2805,7 +2845,7 @@ void AHBConfig::InitializeBins()
         {
             if (DebugOutFilters)
             {
-                LOG_ERROR("module", "AuctionHouseBot: Item {} disabled (Conjured Consumable)", itr->second.ItemId);
+                LOG_INFO("module", "AuctionHouseBot: Item {} disabled (Conjured Consumable)", itr->second.ItemId);
             }
 
             continue;
@@ -2819,7 +2859,7 @@ void AHBConfig::InitializeBins()
         {
             if (DebugOutFilters)
             {
-                LOG_ERROR("module", "AuctionHouseBot: Item {} disabled (Gem)", itr->second.ItemId);
+                LOG_INFO("module", "AuctionHouseBot: Item {} disabled (Gem)", itr->second.ItemId);
             }
 
             continue;
@@ -2833,7 +2873,7 @@ void AHBConfig::InitializeBins()
         {
             if (DebugOutFilters)
             {
-                LOG_ERROR("module", "AuctionHouseBot: Item {} disabled (Money)", itr->second.ItemId);
+                LOG_INFO("module", "AuctionHouseBot: Item {} disabled (Money)", itr->second.ItemId);
             }
 
             continue;
@@ -2847,7 +2887,7 @@ void AHBConfig::InitializeBins()
         {
             if (DebugOutFilters)
             {
-                LOG_ERROR("module", "AuctionHouseBot: Item {} disabled (MoneyLoot)", itr->second.ItemId);
+                LOG_INFO("module", "AuctionHouseBot: Item {} disabled (MoneyLoot)", itr->second.ItemId);
             }
 
             continue;
@@ -2861,7 +2901,7 @@ void AHBConfig::InitializeBins()
         {
             if (DebugOutFilters)
             {
-                LOG_ERROR("module", "AuctionHouseBot: Item {} disabled (Lootable Item)", itr->second.ItemId);
+                LOG_INFO("module", "AuctionHouseBot: Item {} disabled (Lootable Item)", itr->second.ItemId);
             }
 
             continue;
@@ -2875,7 +2915,7 @@ void AHBConfig::InitializeBins()
         {
             if (DebugOutFilters)
             {
-                LOG_ERROR("module", "AuctionHouseBot: Item {} disabled (Quest Item)", itr->second.ItemId);
+                LOG_INFO("module", "AuctionHouseBot: Item {} disabled (Quest Item)", itr->second.ItemId);
             }
 
             continue;
@@ -2889,7 +2929,7 @@ void AHBConfig::InitializeBins()
         {
             if (DebugOutFilters)
             {
-                LOG_ERROR("module", "AuctionHouseBot: Item {} disabled (Has a Duration)", itr->second.ItemId);
+                LOG_INFO("module", "AuctionHouseBot: Item {} disabled (Has a Duration)", itr->second.ItemId);
             }
 
             continue;
@@ -2903,7 +2943,7 @@ void AHBConfig::InitializeBins()
         {
             if (DebugOutFilters)
             {
-                LOG_ERROR("module", "AuctionHouseBot: Item {} disabled (BOP or BQI and Required Level is less than Item Level)", itr->second.ItemId);
+                LOG_INFO("module", "AuctionHouseBot: Item {} disabled (BOP or BQI and Required Level is less than Item Level)", itr->second.ItemId);
             }
 
             continue;
@@ -2917,7 +2957,7 @@ void AHBConfig::InitializeBins()
         {
             if (DebugOutFilters)
             {
-                LOG_ERROR("module", "AuctionHouseBot: Item {} disabled (Warrior Item)", itr->second.ItemId);
+                LOG_INFO("module", "AuctionHouseBot: Item {} disabled (Warrior Item)", itr->second.ItemId);
             }
 
             continue;
@@ -2931,7 +2971,7 @@ void AHBConfig::InitializeBins()
         {
             if (DebugOutFilters)
             {
-                LOG_ERROR("module", "AuctionHouseBot: Item {} disabled (Paladin Item)", itr->second.ItemId);
+                LOG_INFO("module", "AuctionHouseBot: Item {} disabled (Paladin Item)", itr->second.ItemId);
             }
 
             continue;
@@ -2945,7 +2985,7 @@ void AHBConfig::InitializeBins()
         {
             if (DebugOutFilters)
             {
-                LOG_ERROR("module", "AuctionHouseBot: Item {} disabled (Hunter Item)", itr->second.ItemId);
+                LOG_INFO("module", "AuctionHouseBot: Item {} disabled (Hunter Item)", itr->second.ItemId);
             }
 
             continue;
@@ -2959,7 +2999,7 @@ void AHBConfig::InitializeBins()
         {
             if (DebugOutFilters)
             {
-                LOG_ERROR("module", "AuctionHouseBot: Item {} disabled (Rogue Item)", itr->second.ItemId);
+                LOG_INFO("module", "AuctionHouseBot: Item {} disabled (Rogue Item)", itr->second.ItemId);
             }
 
             continue;
@@ -2973,7 +3013,7 @@ void AHBConfig::InitializeBins()
         {
             if (DebugOutFilters)
             {
-                LOG_ERROR("module", "AuctionHouseBot: Item {} disabled (Priest Item)", itr->second.ItemId);
+                LOG_INFO("module", "AuctionHouseBot: Item {} disabled (Priest Item)", itr->second.ItemId);
             }
 
             continue;
@@ -2987,7 +3027,7 @@ void AHBConfig::InitializeBins()
         {
             if (DebugOutFilters)
             {
-                LOG_ERROR("module", "AuctionHouseBot: Item {} disabled (DK Item)", itr->second.ItemId);
+                LOG_INFO("module", "AuctionHouseBot: Item {} disabled (DK Item)", itr->second.ItemId);
             }
 
             continue;
@@ -3001,7 +3041,7 @@ void AHBConfig::InitializeBins()
         {
             if (DebugOutFilters)
             {
-                LOG_ERROR("module", "AuctionHouseBot: Item {} disabled (Shaman Item)", itr->second.ItemId);
+                LOG_INFO("module", "AuctionHouseBot: Item {} disabled (Shaman Item)", itr->second.ItemId);
             }
 
             continue;
@@ -3015,7 +3055,7 @@ void AHBConfig::InitializeBins()
         {
             if (DebugOutFilters)
             {
-                LOG_ERROR("module", "AuctionHouseBot: Item {} disabled (Mage Item)", itr->second.ItemId);
+                LOG_INFO("module", "AuctionHouseBot: Item {} disabled (Mage Item)", itr->second.ItemId);
             }
 
             continue;
@@ -3029,7 +3069,7 @@ void AHBConfig::InitializeBins()
         {
             if (DebugOutFilters)
             {
-                LOG_ERROR("module", "AuctionHouseBot: Item {} disabled (Warlock Item)", itr->second.ItemId);
+                LOG_INFO("module", "AuctionHouseBot: Item {} disabled (Warlock Item)", itr->second.ItemId);
             }
 
             continue;
@@ -3043,7 +3083,7 @@ void AHBConfig::InitializeBins()
         {
             if (DebugOutFilters)
             {
-                LOG_ERROR("module", "AuctionHouseBot: Item {} disabled (Unused Item)", itr->second.ItemId);
+                LOG_INFO("module", "AuctionHouseBot: Item {} disabled (Unused Item)", itr->second.ItemId);
             }
 
             continue;
@@ -3057,7 +3097,7 @@ void AHBConfig::InitializeBins()
         {
             if (DebugOutFilters)
             {
-                LOG_ERROR("module", "AuctionHouseBot: Item {} disabled (Druid Item)", itr->second.ItemId);
+                LOG_INFO("module", "AuctionHouseBot: Item {} disabled (Druid Item)", itr->second.ItemId);
             }
 
             continue;
@@ -3071,7 +3111,7 @@ void AHBConfig::InitializeBins()
         {
             if (DebugOutFilters)
             {
-                LOG_ERROR("module", "AuctionHouseBot: Item {} disabled (Item Level = {})", itr->second.ItemId, itr->second.ItemLevel);
+                LOG_INFO("module", "AuctionHouseBot: Item {} disabled (Item Level = {})", itr->second.ItemId, itr->second.ItemLevel);
             }
 
             continue;
@@ -3085,7 +3125,7 @@ void AHBConfig::InitializeBins()
         {
             if (DebugOutFilters)
             {
-                LOG_ERROR("module", "AuctionHouseBot: Item {} disabled (Item Level = {})", itr->second.ItemId, itr->second.ItemLevel);
+                LOG_INFO("module", "AuctionHouseBot: Item {} disabled (Item Level = {})", itr->second.ItemId, itr->second.ItemLevel);
             }
 
             continue;
@@ -3099,7 +3139,7 @@ void AHBConfig::InitializeBins()
         {
             if (DebugOutFilters)
             {
-                LOG_ERROR("module", "AuctionHouseBot: Trade Good {} disabled (Trade Good Level = {})", itr->second.ItemId, itr->second.ItemLevel);
+                LOG_INFO("module", "AuctionHouseBot: Trade Good {} disabled (Trade Good Level = {})", itr->second.ItemId, itr->second.ItemLevel);
             }
 
             continue;
@@ -3113,7 +3153,7 @@ void AHBConfig::InitializeBins()
         {
             if (DebugOutFilters)
             {
-                LOG_ERROR("module", "AuctionHouseBot: Trade Good {} disabled (Trade Good Level = {})", itr->second.ItemId, itr->second.ItemLevel);
+                LOG_INFO("module", "AuctionHouseBot: Trade Good {} disabled (Trade Good Level = {})", itr->second.ItemId, itr->second.ItemLevel);
             }
 
             continue;
@@ -3127,7 +3167,7 @@ void AHBConfig::InitializeBins()
         {
             if (DebugOutFilters)
             {
-                LOG_ERROR("module", "AuctionHouseBot: Item {} disabled (Item Level = {})", itr->second.ItemId, itr->second.ItemLevel);
+                LOG_INFO("module", "AuctionHouseBot: Item {} disabled (Item Level = {})", itr->second.ItemId, itr->second.ItemLevel);
             }
 
             continue;
@@ -3141,7 +3181,7 @@ void AHBConfig::InitializeBins()
         {
             if (DebugOutFilters)
             {
-                LOG_ERROR("module", "AuctionHouseBot: Item {} disabled (Item Level = {})", itr->second.ItemId, itr->second.ItemLevel);
+                LOG_INFO("module", "AuctionHouseBot: Item {} disabled (Item Level = {})", itr->second.ItemId, itr->second.ItemLevel);
             }
 
             continue;
@@ -3155,7 +3195,7 @@ void AHBConfig::InitializeBins()
         {
             if (DebugOutFilters)
             {
-                LOG_ERROR("module", "AuctionHouseBot: Item {} disabled (Trade Good Level = {})", itr->second.ItemId, itr->second.ItemLevel);
+                LOG_INFO("module", "AuctionHouseBot: Item {} disabled (Trade Good Level = {})", itr->second.ItemId, itr->second.ItemLevel);
             }
 
             continue;
@@ -3169,7 +3209,7 @@ void AHBConfig::InitializeBins()
         {
             if (DebugOutFilters)
             {
-                LOG_ERROR("module", "AuctionHouseBot: Item {} disabled (Trade Good Level = {})", itr->second.ItemId, itr->second.ItemLevel);
+                LOG_INFO("module", "AuctionHouseBot: Item {} disabled (Trade Good Level = {})", itr->second.ItemId, itr->second.ItemLevel);
             }
 
             continue;
@@ -3183,7 +3223,7 @@ void AHBConfig::InitializeBins()
         {
             if (DebugOutFilters)
             {
-                LOG_ERROR("module", "AuctionHouseBot: Item {} disabled (RequiredLevel = {})", itr->second.ItemId, itr->second.RequiredLevel);
+                LOG_INFO("module", "AuctionHouseBot: Item {} disabled (RequiredLevel = {})", itr->second.ItemId, itr->second.RequiredLevel);
             }
 
             continue;
@@ -3197,7 +3237,7 @@ void AHBConfig::InitializeBins()
         {
             if (DebugOutFilters)
             {
-                LOG_ERROR("module", "AuctionHouseBot: Item {} disabled (RequiredLevel = {})", itr->second.ItemId, itr->second.RequiredLevel);
+                LOG_INFO("module", "AuctionHouseBot: Item {} disabled (RequiredLevel = {})", itr->second.ItemId, itr->second.RequiredLevel);
             }
 
             continue;
@@ -3211,7 +3251,7 @@ void AHBConfig::InitializeBins()
         {
             if (DebugOutFilters)
             {
-                LOG_ERROR("module", "AuctionHouseBot: Trade Good {} disabled (RequiredLevel = {})", itr->second.ItemId, itr->second.RequiredLevel);
+                LOG_INFO("module", "AuctionHouseBot: Trade Good {} disabled (RequiredLevel = {})", itr->second.ItemId, itr->second.RequiredLevel);
             }
 
             continue;
@@ -3225,7 +3265,7 @@ void AHBConfig::InitializeBins()
         {
             if (DebugOutFilters)
             {
-                LOG_ERROR("module", "AuctionHouseBot: Trade Good {} disabled (RequiredLevel = {})", itr->second.ItemId, itr->second.RequiredLevel);
+                LOG_INFO("module", "AuctionHouseBot: Trade Good {} disabled (RequiredLevel = {})", itr->second.ItemId, itr->second.RequiredLevel);
             }
 
             continue;
@@ -3239,7 +3279,7 @@ void AHBConfig::InitializeBins()
         {
             if (DebugOutFilters)
             {
-                LOG_ERROR("module", "AuctionHouseBot: Item {} disabled (RequiredSkillRank = {})", itr->second.ItemId, itr->second.RequiredSkillRank);
+                LOG_INFO("module", "AuctionHouseBot: Item {} disabled (RequiredSkillRank = {})", itr->second.ItemId, itr->second.RequiredSkillRank);
             }
 
             continue;
@@ -3253,7 +3293,7 @@ void AHBConfig::InitializeBins()
         {
             if (DebugOutFilters)
             {
-                LOG_ERROR("module", "AuctionHouseBot: Item {} disabled (RequiredSkillRank = {})", itr->second.ItemId, itr->second.RequiredSkillRank);
+                LOG_INFO("module", "AuctionHouseBot: Item {} disabled (RequiredSkillRank = {})", itr->second.ItemId, itr->second.RequiredSkillRank);
             }
 
             continue;
@@ -3267,7 +3307,7 @@ void AHBConfig::InitializeBins()
         {
             if (DebugOutFilters)
             {
-                LOG_ERROR("module", "AuctionHouseBot: Item {} disabled (RequiredSkillRank = {})", itr->second.ItemId, itr->second.RequiredSkillRank);
+                LOG_INFO("module", "AuctionHouseBot: Item {} disabled (RequiredSkillRank = {})", itr->second.ItemId, itr->second.RequiredSkillRank);
             }
 
             continue;
@@ -3281,7 +3321,7 @@ void AHBConfig::InitializeBins()
         {
             if (DebugOutFilters)
             {
-                LOG_ERROR("module", "AuctionHouseBot: Item {} disabled (RequiredSkillRank = {})", itr->second.ItemId, itr->second.RequiredSkillRank);
+                LOG_INFO("module", "AuctionHouseBot: Item {} disabled (RequiredSkillRank = {})", itr->second.ItemId, itr->second.RequiredSkillRank);
             }
 
             continue;
@@ -3383,7 +3423,7 @@ void AHBConfig::InitializeBins()
     {
         if (DisableItemStore.size() == 0)
         {
-            LOG_ERROR("module", "AHBot: No items are disabled or in the whitelist! Selling will be disabled!");
+            LOG_ERROR("module", "AHBot: No whitelisted or disabled items! Selling will be disabled!");
 
             GreyTradeGoodsBin.clear();
             WhiteTradeGoodsBin.clear();
@@ -3405,13 +3445,13 @@ void AHBConfig::InitializeBins()
             return;
         }
 
-        LOG_INFO("module", ">> Using all compatible items ({} disabled)", uint32(DisableItemStore.size()));
+        LOG_INFO("module", ">> No whitelist detected, using list of {} disabled items)", uint32(DisableItemStore.size()));
     }
     else
     {
         LOG_INFO("module", ">> Using a whitelist of {} items", uint32(SellerWhiteList.size()));
     }
-
+    LOG_INFO("module", "Enabled items");
     // Header: Right-aligned within 6-character fields
     LOG_INFO("module", ">>\t{:>6}\t{:>6}\t{:>6}\t{:>6}\t{:>6}\t{:>6}\t{:>6}",
         "grey", "white", "green", "blue", "purple", "orange", "yellow");
@@ -3435,6 +3475,32 @@ void AHBConfig::InitializeBins()
         static_cast<uint32>(PurpleItemsBin.size()),
         static_cast<uint32>(OrangeItemsBin.size()),
         static_cast<uint32>(YellowItemsBin.size()));
+    // Total Trade Goods Count
+    uint32 totalTradeGoods = static_cast<uint32>(GreyTradeGoodsBin.size()) +
+                             static_cast<uint32>(WhiteTradeGoodsBin.size()) +
+                             static_cast<uint32>(GreenTradeGoodsBin.size()) +
+                             static_cast<uint32>(BlueTradeGoodsBin.size()) +
+                             static_cast<uint32>(PurpleTradeGoodsBin.size()) +
+                             static_cast<uint32>(OrangeTradeGoodsBin.size()) +
+                             static_cast<uint32>(YellowTradeGoodsBin.size());
+    
+    // Total Items Count
+    uint32 totalItems = static_cast<uint32>(GreyItemsBin.size()) +
+                        static_cast<uint32>(WhiteItemsBin.size()) +
+                        static_cast<uint32>(GreenItemsBin.size()) +
+                        static_cast<uint32>(BlueItemsBin.size()) +
+                        static_cast<uint32>(PurpleItemsBin.size()) +
+                        static_cast<uint32>(OrangeItemsBin.size()) +
+                        static_cast<uint32>(YellowItemsBin.size());
+    
+
+    // Grand Total Count (Trade Goods + Items)
+    uint32 grandTotal = totalTradeGoods + totalItems;
+    
+    // Final Log Info for Total Counts
+    LOG_INFO("module", ">> Trade Goods: {:>6}, Items: {:>6}, Total: {:>6}", 
+             totalTradeGoods, totalItems, grandTotal);
+
 }
 
 std::set<uint32> AHBConfig::getCommaSeparatedIntegers(std::string text)
