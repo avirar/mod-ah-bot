@@ -901,7 +901,7 @@ void AuctionHouseBot::Sell(Player* AHBplayer, AHBConfig* config)
         }
 
         //
-        // If the buyout price is still zero, determine a random one using the item level
+        // If the buyout price is still zero, determine a random one using the item level and quality
         //
 
         if (config->SellZeroPriceItems)
@@ -947,7 +947,7 @@ void AuctionHouseBot::Sell(Player* AHBplayer, AHBConfig* config)
                 buyoutPrice = basePrice * qualityMultiplier;
         
                 // Optional: Adjust scaling if necessary
-                buyoutPrice = buyoutPrice / 100;
+                // buyoutPrice = buyoutPrice / 100;
         
                 if (buyoutPrice <= 0)
                 {
