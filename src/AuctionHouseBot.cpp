@@ -964,11 +964,11 @@ void AuctionHouseBot::Sell(Player* AHBplayer, AHBConfig* config)
         
         // Continue with the existing price adjustment
         buyoutPrice = buyoutPrice * urand(config->GetMinPrice(prototype->Quality), config->GetMaxPrice(prototype->Quality));
-        buyoutPrice = buyoutPrice / 100;
+        buyoutPrice = buyoutPrice / 10;
 
 
         bidPrice    = buyoutPrice * urand(config->GetMinBidPrice(prototype->Quality), config->GetMaxBidPrice(prototype->Quality));
-        bidPrice    = bidPrice / 100;
+        bidPrice    = bidPrice / 10;
 
         // 
         // Determine the stack size
