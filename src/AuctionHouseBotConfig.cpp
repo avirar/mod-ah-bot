@@ -3445,13 +3445,14 @@ void AHBConfig::InitializeBins()
             return;
         }
 
-        LOG_INFO("module", ">> No whitelist detected, using list of {} disabled items)", uint32(DisableItemStore.size()));
+        LOG_INFO("module", ">> No whitelist detected, using list of {} disabled items", uint32(DisableItemStore.size()));
     }
     else
     {
         LOG_INFO("module", ">> Using a whitelist of {} items", uint32(SellerWhiteList.size()));
     }
-    LOG_INFO("module", "Enabled items");
+    LOG_INFO("module", ">>");
+    LOG_INFO("module", ">> Enabled items breakdown:");
     // Header: Right-aligned within 6-character fields
     LOG_INFO("module", ">>\t{:>6}\t{:>6}\t{:>6}\t{:>6}\t{:>6}\t{:>6}\t{:>6}",
         "grey", "white", "green", "blue", "purple", "orange", "yellow");
@@ -3498,9 +3499,8 @@ void AHBConfig::InitializeBins()
     uint32 grandTotal = totalTradeGoods + totalItems;
     
     // Final Log Info for Total Counts
-    LOG_INFO("module", ">> Trade Goods: {:>6}, Items: {:>6}, Total: {:>6}", 
-             totalTradeGoods, totalItems, grandTotal);
-
+    LOG_INFO("module", ">>");
+    LOG_INFO("module", ">> Using {} enabled items ({} trade goods and {} other items)", grandTotal, totalTradeGoods, totalItems);
 }
 
 std::set<uint32> AHBConfig::getCommaSeparatedIntegers(std::string text)
