@@ -968,7 +968,7 @@ void AuctionHouseBot::Sell(Player* AHBplayer, AHBConfig* config)
 
 
         bidPrice    = buyoutPrice * urand(config->GetMinBidPrice(prototype->Quality), config->GetMaxBidPrice(prototype->Quality));
-        bidPrice    = bidPrice / 25;
+        bidPrice    = bidPrice / 100;
 
         // 
         // Determine the stack size
