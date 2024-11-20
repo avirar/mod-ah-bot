@@ -990,23 +990,23 @@ void AuctionHouseBot::Sell(Player* AHBplayer, AHBConfig* config)
                 // Use Maxstack size for white and green item
                 case ITEM_QUALITY_NORMAL:    // WHITE
                 case ITEM_QUALITY_UNCOMMON:  // GREEN
-                    stackCount = itemMaxStack;
+                    stackCount = urand(1, itemMaxStack);
                     break;
 
                 case ITEM_QUALITY_RARE:      // BLUE
                     // If divisible by 2, use half; otherwise, use full
                     if (itemMaxStack % 2 == 0)
-                        stackCount = itemMaxStack / 2;
+                        stackCount = urand(1, itemMaxStack / 2);
                     else
-                        stackCount = itemMaxStack;
+                        stackCount = urand(1, itemMaxStack);
                     break;
     
                 case ITEM_QUALITY_EPIC:      // PURPLE
                     // If divisible by 4, use quarter; otherwise, use full
                     if (itemMaxStack % 4 == 0)
-                        stackCount = itemMaxStack / 4;
+                        stackCount = urand(1, itemMaxStack / 4);
                     else
-                        stackCount = itemMaxStack;
+                        stackCount = urand(1, itemMaxStack);
                     break;
     
                 // You can add more cases here for other qualities if needed
