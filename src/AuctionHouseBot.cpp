@@ -915,29 +915,46 @@ uint32 AuctionHouseBot::DetermineStackSize(ItemTemplate const* prototype, AHBCon
 {
     uint32 itemMaxStack = prototype->GetMaxStackSize();
     uint32 configMaxStack = config->GetMaxStack(prototype->Quality);
+    
+    // If configMaxStack is 0, default to item's inherent max stack size
+    if (configMaxStack == 0)
+    {
+        configMaxStack = itemMaxStack;
+    }
+    
+    // Calculate maxStack as the minimum of itemMaxStack and configMaxStack
     uint32 maxStack = std::min(itemMaxStack, configMaxStack);
-
+    
+    // Debug output (optional)
+    if (config->DebugOutSeller)
+    {
+        LOG_DEBUG("module", "AHBot [{}]: Item {}: itemMaxStack={}, configMaxStack={}, maxStack={}",
+            _id, prototype->ItemId, itemMaxStack, configMaxStack, maxStack);
+    }
+    
+    // Proceed with determining the stack count
     if (maxStack > 1)
     {
         uint32 stackCount = urand(1, maxStack);
-
+    
         // Optional: Favor full stacks
         if (urand(1, 100) <= 30) // 30% chance for full stack
             stackCount = maxStack;
-
+    
         if (config->DebugOutSeller)
         {
-            LOG_ERROR("module", "AHBot [{}]: Item {} max stack: itemMaxStack={}, configMaxStack={}, determined stackCount={}",
-                _id, prototype->ItemId, itemMaxStack, configMaxStack, stackCount);
+            LOG_DEBUG("module", "AHBot [{}]: Determined stack size for item {}: {}", _id, prototype->ItemId, stackCount);
         }
-
+    
         return stackCount;
     }
     else
     {
         return 1;
     }
+
 }
+
 
 uint32 AuctionHouseBot::GetStackDivisor(uint32 quality)
 {
