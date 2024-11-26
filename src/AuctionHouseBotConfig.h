@@ -369,7 +369,7 @@ public:
     void   DecItemCounts     (uint32 Class, uint32 Quality);
     void   DecItemCounts     (uint32 color);
 
-    void   IncItemCounts     (uint32 Class, uint32 Quality)															
+    void   IncItemCounts     (uint32 Class, uint32 Quality);
     void   IncItemCounts     (uint32 color);
 
     void   ResetItemCounts   ();
