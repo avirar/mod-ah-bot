@@ -21,10 +21,30 @@
 #define AUCTION_HOUSE_BOT_CONFIG_H
 
 #include <map>
+#include <vector>
 #include <set>
 #include <string>
 
 #include "ObjectMgr.h"
+
+//
+// Constants for item qualities and types
+//
+#define AHB_GREY_TG    0
+#define AHB_WHITE_TG   1
+#define AHB_GREEN_TG   2
+#define AHB_BLUE_TG    3
+#define AHB_PURPLE_TG  4
+#define AHB_ORANGE_TG  5
+#define AHB_YELLOW_TG  6
+
+#define AHB_GREY_I     7
+#define AHB_WHITE_I    8
+#define AHB_GREEN_I    9
+#define AHB_BLUE_I     10
+#define AHB_PURPLE_I   11
+#define AHB_ORANGE_I   12
+#define AHB_YELLOW_I   13
 
 class AHBConfig
 {
@@ -269,25 +289,25 @@ public:
     // Bins for trade goods.
     //
 
-    std::set<uint32> GreyTradeGoodsBin;
-    std::set<uint32> WhiteTradeGoodsBin;
-    std::set<uint32> GreenTradeGoodsBin;
-    std::set<uint32> BlueTradeGoodsBin;
-    std::set<uint32> PurpleTradeGoodsBin;
-    std::set<uint32> OrangeTradeGoodsBin;
-    std::set<uint32> YellowTradeGoodsBin;
+    std::vector<uint32> GreyTradeGoodsBin;
+    std::vector<uint32> WhiteTradeGoodsBin;
+    std::vector<uint32> GreenTradeGoodsBin;
+    std::vector<uint32> BlueTradeGoodsBin;
+    std::vector<uint32> PurpleTradeGoodsBin;
+    std::vector<uint32> OrangeTradeGoodsBin;
+    std::vector<uint32> YellowTradeGoodsBin;
 
     //
     // Bins for items
     //
 
-    std::set<uint32> GreyItemsBin;
-    std::set<uint32> WhiteItemsBin;
-    std::set<uint32> GreenItemsBin;
-    std::set<uint32> BlueItemsBin;
-    std::set<uint32> PurpleItemsBin;
-    std::set<uint32> OrangeItemsBin;
-    std::set<uint32> YellowItemsBin;
+    std::vector<uint32> GreyItemsBin;
+    std::vector<uint32> WhiteItemsBin;
+    std::vector<uint32> GreenItemsBin;
+    std::vector<uint32> BlueItemsBin;
+    std::vector<uint32> PurpleItemsBin;
+    std::vector<uint32> OrangeItemsBin;
+    std::vector<uint32> YellowItemsBin;
 
     //
     // Constructors/destructors
@@ -299,7 +319,7 @@ public:
     ~AHBConfig();
 
     //
-    // Ruotines
+    // Routines
     //
 
     void   Initialize(std::set<uint32> botsIds);
@@ -320,19 +340,19 @@ public:
     uint32 GetPercentages    (uint32 color);
 
     void   SetMinPrice       (uint32 color, uint32 value);
-    uint32 GetMinPrice       (uint32 color);
+    uint32 GetMinPrice       (uint32 quality);
 
     void   SetMaxPrice       (uint32 color, uint32 value);
-    uint32 GetMaxPrice       (uint32 color);
+    uint32 GetMaxPrice       (uint32 quality);
 
     void   SetMinBidPrice    (uint32 color, uint32 value);
-    uint32 GetMinBidPrice    (uint32 color);
+    uint32 GetMinBidPrice    (uint32 quality);
 
     void   SetMaxBidPrice    (uint32 color, uint32 value);
-    uint32 GetMaxBidPrice    (uint32 color);
+    uint32 GetMaxBidPrice    (uint32 quality);
 
     void   SetMaxStack       (uint32 color, uint32 value);
-    uint32 GetMaxStack       (uint32 color);
+    uint32 GetMaxStack       (uint32 quality);
 
     void   SetBuyerPrice     (uint32 color, uint32 value);
     uint32 GetBuyerPrice     (uint32 color);
@@ -346,10 +366,7 @@ public:
     void   CalculatePercents ();
     uint32 GetMaximum        (uint32 color);
 
-    void   DecItemCounts     (uint32 Class, uint32 Quality);
     void   DecItemCounts     (uint32 color);
-
-    void   IncItemCounts     (uint32 Class, uint32 Quality);
     void   IncItemCounts     (uint32 color);
 
     void   ResetItemCounts   ();
