@@ -1574,64 +1574,23 @@ uint32 AHBConfig::GetMaximum(uint32 color)
 {
     switch (color)
     {
-    case AHB_GREY_TG:
-        return greytgp;
-        break;
+        case AHB_GREY_TG:   return greytgp;
+        case AHB_WHITE_TG:  return whitetgp;
+        case AHB_GREEN_TG:  return greentgp;
+        case AHB_BLUE_TG:   return bluetgp;
+        case AHB_PURPLE_TG: return purpletgp;
+        case AHB_ORANGE_TG: return orangetgp;
+        case AHB_YELLOW_TG: return yellowtgp;
 
-    case AHB_WHITE_TG:
-        return whitetgp;
-        break;
+        case AHB_GREY_I:    return greyip;
+        case AHB_WHITE_I:   return whiteip;
+        case AHB_GREEN_I:   return greenip;
+        case AHB_BLUE_I:    return blueip;
+        case AHB_PURPLE_I:  return purpleip;
+        case AHB_ORANGE_I:  return orangeip;
+        case AHB_YELLOW_I:  return yellowip;
 
-    case AHB_GREEN_TG:
-        return greentgp;
-        break;
-
-    case AHB_BLUE_TG:
-        return bluetgp;
-        break;
-
-    case AHB_PURPLE_TG:
-        return purpletgp;
-        break;
-    case AHB_ORANGE_TG:
-        return orangetgp;
-        break;
-
-    case AHB_YELLOW_TG:
-        return yellowtgp;
-        break;
-
-    case AHB_GREY_I:
-        return greyip;
-        break;
-
-    case AHB_WHITE_I:
-        return whiteip;
-        break;
-
-    case AHB_GREEN_I:
-        return greenip;
-        break;
-
-    case AHB_BLUE_I:
-        return blueip;
-        break;
-
-    case AHB_PURPLE_I:
-        return purpleip;
-        break;
-
-    case AHB_ORANGE_I:
-        return orangeip;
-        break;
-
-    case AHB_YELLOW_I:
-        return yellowip;
-        break;
-
-    default:
-        return 0;
-        break;
+        default:            return 0;
     }
 }
 
@@ -3549,28 +3508,3 @@ std::set<uint32> AHBConfig::getCommaSeparatedIntegers(std::string text)
 
     return ret;
 }
-
-uint32 AHBConfig::GetMaximum(uint32 color)
-{
-    switch (color)
-    {
-        case AHB_GREY_TG:   return greytgp;
-        case AHB_WHITE_TG:  return whitetgp;
-        case AHB_GREEN_TG:  return greentgp;
-        case AHB_BLUE_TG:   return bluetgp;
-        case AHB_PURPLE_TG: return purpletgp;
-        case AHB_ORANGE_TG: return orangetgp;
-        case AHB_YELLOW_TG: return yellowtgp;
-
-        case AHB_GREY_I:    return greyip;
-        case AHB_WHITE_I:   return whiteip;
-        case AHB_GREEN_I:   return greenip;
-        case AHB_BLUE_I:    return blueip;
-        case AHB_PURPLE_I:  return purpleip;
-        case AHB_ORANGE_I:  return orangeip;
-        case AHB_YELLOW_I:  return yellowip;
-
-        default:            return 0;
-    }
-}
-
