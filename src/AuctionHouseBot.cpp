@@ -911,21 +911,34 @@ int AuctionHouseBot::GetQualityMultiplier(uint32 quality)
     }
 }
 
-uint32 AuctionHouseBot::DetermineStackSize(const ItemTemplate* prototype, AHBConfig* config)
+uint32 AuctionHouseBot::DetermineStackSize(ItemTemplate const* prototype, AHBConfig* config)
 {
-    uint32 maxStackConfig = config->GetMaxStack(prototype->Quality);
     uint32 itemMaxStack = prototype->GetMaxStackSize();
+    uint32 configMaxStack = config->GetMaxStack(prototype->Quality);
+    uint32 maxStack = std::min(itemMaxStack, configMaxStack);
 
-    if (maxStackConfig == 0 || itemMaxStack <= 1)
+    if (maxStack > 1)
+    {
+        uint32 stackCount = urand(1, maxStack);
+
+        // Optional: Favor full stacks
+        if (urand(1, 100) <= 30) // 30% chance for full stack
+            stackCount = maxStack;
+
+        if (config->DebugOutSeller)
+        {
+            LOG_INFO("module", "AHBot [{}]: Item {} max stack: itemMaxStack={}, configMaxStack={}, determined stackCount={}",
+                _id, prototype->ItemId, itemMaxStack, configMaxStack, stackCount);
+        }
+
+        return stackCount;
+    }
+    else
+    {
         return 1;
-
-    uint32 maxAllowedStack = std::min(maxStackConfig, itemMaxStack);
-
-    // Adjust stack size based on item quality
-    uint32 divisor = GetStackDivisor(prototype->Quality);
-    uint32 maxStack = maxAllowedStack / divisor;
-    return urand(1, maxStack > 0 ? maxStack : 1);
+    }
 }
+
 uint32 AuctionHouseBot::GetStackDivisor(uint32 quality)
 {
     switch (quality)
