@@ -1883,67 +1883,26 @@ uint32 AHBConfig::GetItemCounts(uint32 color)
 {
     switch (color)
     {
-    case AHB_GREY_TG:
-        return greyTGoods;
-        break;
+        case AHB_GREY_TG:   return greyTGoods;
+        case AHB_WHITE_TG:  return whiteTGoods;
+        case AHB_GREEN_TG:  return greenTGoods;
+        case AHB_BLUE_TG:   return blueTGoods;
+        case AHB_PURPLE_TG: return purpleTGoods;
+        case AHB_ORANGE_TG: return orangeTGoods;
+        case AHB_YELLOW_TG: return yellowTGoods;
 
-    case AHB_WHITE_TG:
-        return whiteTGoods;
-        break;
+        case AHB_GREY_I:    return greyItems;
+        case AHB_WHITE_I:   return whiteItems;
+        case AHB_GREEN_I:   return greenItems;
+        case AHB_BLUE_I:    return blueItems;
+        case AHB_PURPLE_I:  return purpleItems;
+        case AHB_ORANGE_I:  return orangeItems;
+        case AHB_YELLOW_I:  return yellowItems;
 
-    case AHB_GREEN_TG:
-        return greenTGoods;
-        break;
-
-    case AHB_BLUE_TG:
-        return blueTGoods;
-        break;
-
-    case AHB_PURPLE_TG:
-        return purpleTGoods;
-        break;
-
-    case AHB_ORANGE_TG:
-        return orangeTGoods;
-        break;
-
-    case AHB_YELLOW_TG:
-        return yellowTGoods;
-        break;
-
-    case AHB_GREY_I:
-        return greyItems;
-        break;
-
-    case AHB_WHITE_I:
-        return whiteItems;
-        break;
-
-    case AHB_GREEN_I:
-        return greenItems;
-        break;
-
-    case AHB_BLUE_I:
-        return blueItems;
-        break;
-
-    case AHB_PURPLE_I:
-        return purpleItems;
-        break;
-
-    case AHB_ORANGE_I:
-        return orangeItems;
-        break;
-
-    case AHB_YELLOW_I:
-        return yellowItems;
-        break;
-
-    default:
-        return 0;
-        break;
+        default:            return 0;
     }
 }
+
 
 void AHBConfig::SetBidsPerInterval(uint32 value)
 {
@@ -3522,3 +3481,28 @@ std::set<uint32> AHBConfig::getCommaSeparatedIntegers(std::string text)
 
     return ret;
 }
+
+uint32 AHBConfig::GetMaximum(uint32 color)
+{
+    switch (color)
+    {
+        case AHB_GREY_TG:   return greytgp;
+        case AHB_WHITE_TG:  return whitetgp;
+        case AHB_GREEN_TG:  return greentgp;
+        case AHB_BLUE_TG:   return bluetgp;
+        case AHB_PURPLE_TG: return purpletgp;
+        case AHB_ORANGE_TG: return orangetgp;
+        case AHB_YELLOW_TG: return yellowtgp;
+
+        case AHB_GREY_I:    return greyip;
+        case AHB_WHITE_I:   return whiteip;
+        case AHB_GREEN_I:   return greenip;
+        case AHB_BLUE_I:    return blueip;
+        case AHB_PURPLE_I:  return purpleip;
+        case AHB_ORANGE_I:  return orangeip;
+        case AHB_YELLOW_I:  return yellowip;
+
+        default:            return 0;
+    }
+}
+
