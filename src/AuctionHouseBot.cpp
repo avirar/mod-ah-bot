@@ -690,20 +690,27 @@ void AuctionHouseBot::Sell(Player* AHBplayer, AHBConfig* config)
             loopbreaker++;
 
             // Shuffle itemBins to add randomness
-            std::shuffle(itemBins.begin(), itemBins.end(), std::mt19937{std::random_device{}()});
-
-            for (auto& bin : itemBins)
+            std::vector<size_t> indices(itemBins.size());
+            std::iota(indices.begin(), indices.end(), 0); // Fill with 0, 1, ..., itemBins.size() - 1
+            
+            std::shuffle(indices.begin(), indices.end(), std::mt19937{std::random_device{}()});
+            
+            // Then, iterate over indices instead of itemBins
+            for (size_t idx : indices)
             {
-                if (bin.bin.empty() || bin.currentCount >= bin.maxCount)
-                    continue;
-
-                uint32 randomIndex = urand(0, bin.bin.size() - 1);
-                itemID = getElement(bin.bin, randomIndex, _id, bin.adjustedDuplicates, auctionHouse);
-
-                if (itemID != 0)
+                auto& bin = itemBins[idx];
                 {
-                    choice = bin.choice;
-                    break;
+                    if (bin.bin.empty() || bin.currentCount >= bin.maxCount)
+                        continue;
+    
+                    uint32 randomIndex = urand(0, bin.bin.size() - 1);
+                    itemID = getElement(bin.bin, randomIndex, _id, bin.adjustedDuplicates, auctionHouse);
+    
+                    if (itemID != 0)
+                    {
+                        choice = bin.choice;
+                        break;
+                    }
                 }
             }
 
