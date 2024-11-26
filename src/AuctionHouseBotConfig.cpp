@@ -534,6 +534,23 @@ void AHBConfig::Reset()
     OrangeItemsBin.clear();
     YellowItemsBin.clear();
 
+    GreyTradeGoodsSet.clear();
+    WhiteTradeGoodsSet.clear();
+    GreenTradeGoodsSet.clear();
+    BlueTradeGoodsSet.clear();
+    PurpleTradeGoodsSet.clear();
+    OrangeTradeGoodsSet.clear();
+    YellowTradeGoodsSet.clear();
+
+    GreyItemsSet.clear();
+    WhiteItemsSet.clear();
+    GreenItemsSet.clear();
+    BlueItemsSet.clear();
+    PurpleItemsSet.clear();
+    OrangeItemsSet.clear();
+    YellowItemsSet.clear();
+
+
     itemsCount.clear();
     itemsSum.clear();
     itemsPrice.clear();
@@ -3231,38 +3248,87 @@ void AHBConfig::InitializeBins()
             switch (itr->second.Quality)
             {
             case AHB_GREY:
-                GreyTradeGoodsBin.insert(itr->second.ItemId);
-                LOG_DEBUG("module", "AuctionHouseBot: Item {} sorted into GreyTradeGoodsBin", itr->second.ItemId);
+                if (GreyTradeGoodsSet.insert(itr->second.ItemId).second)
+                {
+                    GreyTradeGoodsBin.push_back(itr->second.ItemId);
+                    LOG_DEBUG("module", "AuctionHouseBot: Item {} sorted into GreyTradeGoodsBin", itr->second.ItemId);
+                }
+                else
+                {
+                    LOG_DEBUG("module", "AuctionHouseBot: Duplicate item {} not added to GreyTradeGoodsBin", itr->second.ItemId);
+                }
                 break;
         
             case AHB_WHITE:
-                WhiteTradeGoodsBin.insert(itr->second.ItemId);
-                LOG_DEBUG("module", "AuctionHouseBot: Item {} sorted into WhiteTradeGoodsBin", itr->second.ItemId);
+                if (WhiteTradeGoodsSet.insert(itr->second.ItemId).second)
+                {
+                    WhiteTradeGoodsBin.push_back(itr->second.ItemId);
+                    LOG_DEBUG("module", "AuctionHouseBot: Item {} sorted into WhiteTradeGoodsBin", itr->second.ItemId);
+                }
+                else
+                {
+                    LOG_DEBUG("module", "AuctionHouseBot: Duplicate item {} not added to WhiteTradeGoodsBin", itr->second.ItemId);
+                }
                 break;
         
             case AHB_GREEN:
-                GreenTradeGoodsBin.insert(itr->second.ItemId);
-                LOG_DEBUG("module", "AuctionHouseBot: Item {} sorted into GreenTradeGoodsBin", itr->second.ItemId);
+                if (GreenTradeGoodsSet.insert(itr->second.ItemId).second)
+                {
+                    GreenTradeGoodsBin.push_back(itr->second.ItemId);
+                    LOG_DEBUG("module", "AuctionHouseBot: Item {} sorted into GreenTradeGoodsBin", itr->second.ItemId);
+                }
+                else
+                {
+                    LOG_DEBUG("module", "AuctionHouseBot: Duplicate item {} not added to GreenTradeGoodsBin", itr->second.ItemId);
+                }
                 break;
         
             case AHB_BLUE:
-                BlueTradeGoodsBin.insert(itr->second.ItemId);
-                LOG_DEBUG("module", "AuctionHouseBot: Item {} sorted into BlueTradeGoodsBin", itr->second.ItemId);
+                if (BlueTradeGoodsSet.insert(itr->second.ItemId).second)
+                {
+                    BlueTradeGoodsBin.push_back(itr->second.ItemId);
+                    LOG_DEBUG("module", "AuctionHouseBot: Item {} sorted into BlueTradeGoodsBin", itr->second.ItemId);
+                }
+                else
+                {
+                    LOG_DEBUG("module", "AuctionHouseBot: Duplicate item {} not added to BlueTradeGoodsBin", itr->second.ItemId);
+                }
                 break;
         
             case AHB_PURPLE:
-                PurpleTradeGoodsBin.insert(itr->second.ItemId);
-                LOG_DEBUG("module", "AuctionHouseBot: Item {} sorted into PurpleTradeGoodsBin", itr->second.ItemId);
+                if (PurpleTradeGoodsSet.insert(itr->second.ItemId).second)
+                {
+                    PurpleTradeGoodsBin.push_back(itr->second.ItemId);
+                    LOG_DEBUG("module", "AuctionHouseBot: Item {} sorted into PurpleTradeGoodsBin", itr->second.ItemId);
+                }
+                else
+                {
+                    LOG_DEBUG("module", "AuctionHouseBot: Duplicate item {} not added to PurpleTradeGoodsBin", itr->second.ItemId);
+                }
                 break;
         
             case AHB_ORANGE:
-                OrangeTradeGoodsBin.insert(itr->second.ItemId);
-                LOG_DEBUG("module", "AuctionHouseBot: Item {} sorted into OrangeTradeGoodsBin", itr->second.ItemId);
+                if (OrangeTradeGoodsSet.insert(itr->second.ItemId).second)
+                {
+                    OrangeTradeGoodsBin.push_back(itr->second.ItemId);
+                    LOG_DEBUG("module", "AuctionHouseBot: Item {} sorted into OrangeTradeGoodsBin", itr->second.ItemId);
+                }
+                else
+                {
+                    LOG_DEBUG("module", "AuctionHouseBot: Duplicate item {} not added to OrangeTradeGoodsBin", itr->second.ItemId);
+                }
                 break;
         
             case AHB_YELLOW:
-                YellowTradeGoodsBin.insert(itr->second.ItemId);
-                LOG_DEBUG("module", "AuctionHouseBot: Item {} sorted into YellowTradeGoodsBin", itr->second.ItemId);
+                if (YellowTradeGoodsSet.insert(itr->second.ItemId).second)
+                {
+                    YellowTradeGoodsBin.push_back(itr->second.ItemId);
+                    LOG_DEBUG("module", "AuctionHouseBot: Item {} sorted into YellowTradeGoodsBin", itr->second.ItemId);
+                }
+                else
+                {
+                    LOG_DEBUG("module", "AuctionHouseBot: Duplicate item {} not added to YellowTradeGoodsBin", itr->second.ItemId);
+                }
                 break;
             }
         }
@@ -3271,41 +3337,91 @@ void AHBConfig::InitializeBins()
             switch (itr->second.Quality)
             {
             case AHB_GREY:
-                GreyItemsBin.insert(itr->second.ItemId);
-                LOG_DEBUG("module", "AuctionHouseBot: Item {} sorted into GreyItemsBin", itr->second.ItemId);
+                if (GreyItemsSet.insert(itr->second.ItemId).second)
+                {
+                    GreyItemsBin.push_back(itr->second.ItemId);
+                    LOG_DEBUG("module", "AuctionHouseBot: Item {} sorted into GreyItemsBin", itr->second.ItemId);
+                }
+                else
+                {
+                    LOG_DEBUG("module", "AuctionHouseBot: Duplicate item {} not added to GreyItemsBin", itr->second.ItemId);
+                }
                 break;
         
             case AHB_WHITE:
-                WhiteItemsBin.insert(itr->second.ItemId);
-                LOG_DEBUG("module", "AuctionHouseBot: Item {} sorted into WhiteItemsBin", itr->second.ItemId);
+                if (WhiteItemsSet.insert(itr->second.ItemId).second)
+                {
+                    WhiteItemsBin.push_back(itr->second.ItemId);
+                    LOG_DEBUG("module", "AuctionHouseBot: Item {} sorted into WhiteItemsBin", itr->second.ItemId);
+                }
+                else
+                {
+                    LOG_DEBUG("module", "AuctionHouseBot: Duplicate item {} not added to WhiteItemsBin", itr->second.ItemId);
+                }
                 break;
         
             case AHB_GREEN:
-                GreenItemsBin.insert(itr->second.ItemId);
-                LOG_DEBUG("module", "AuctionHouseBot: Item {} sorted into GreenItemsBin", itr->second.ItemId);
+                if (GreenItemsSet.insert(itr->second.ItemId).second)
+                {
+                    GreenItemsBin.push_back(itr->second.ItemId);
+                    LOG_DEBUG("module", "AuctionHouseBot: Item {} sorted into GreenItemsBin", itr->second.ItemId);
+                }
+                else
+                {
+                    LOG_DEBUG("module", "AuctionHouseBot: Duplicate item {} not added to GreenItemsBin", itr->second.ItemId);
+                }
                 break;
         
             case AHB_BLUE:
-                BlueItemsBin.insert(itr->second.ItemId);
-                LOG_DEBUG("module", "AuctionHouseBot: Item {} sorted into BlueItemsBin", itr->second.ItemId);
+                if (BlueItemsSet.insert(itr->second.ItemId).second)
+                {
+                    BlueItemsBin.push_back(itr->second.ItemId);
+                    LOG_DEBUG("module", "AuctionHouseBot: Item {} sorted into BlueItemsBin", itr->second.ItemId);
+                }
+                else
+                {
+                    LOG_DEBUG("module", "AuctionHouseBot: Duplicate item {} not added to BlueItemsBin", itr->second.ItemId);
+                }
                 break;
         
             case AHB_PURPLE:
-                PurpleItemsBin.insert(itr->second.ItemId);
-                LOG_DEBUG("module", "AuctionHouseBot: Item {} sorted into PurpleItemsBin", itr->second.ItemId);
+                if (PurpleItemsSet.insert(itr->second.ItemId).second)
+                {
+                    PurpleItemsBin.push_back(itr->second.ItemId);
+                    LOG_DEBUG("module", "AuctionHouseBot: Item {} sorted into PurpleItemsBin", itr->second.ItemId);
+                }
+                else
+                {
+                    LOG_DEBUG("module", "AuctionHouseBot: Duplicate item {} not added to PurpleItemsBin", itr->second.ItemId);
+                }
                 break;
         
             case AHB_ORANGE:
-                OrangeItemsBin.insert(itr->second.ItemId);
-                LOG_DEBUG("module", "AuctionHouseBot: Item {} sorted into OrangeItemsBin", itr->second.ItemId);
+                if (OrangeItemsSet.insert(itr->second.ItemId).second)
+                {
+                    OrangeItemsBin.push_back(itr->second.ItemId);
+                    LOG_DEBUG("module", "AuctionHouseBot: Item {} sorted into OrangeItemsBin", itr->second.ItemId);
+                }
+                else
+                {
+                    LOG_DEBUG("module", "AuctionHouseBot: Duplicate item {} not added to OrangeItemsBin", itr->second.ItemId);
+                }
                 break;
         
             case AHB_YELLOW:
-                YellowItemsBin.insert(itr->second.ItemId);
-                LOG_DEBUG("module", "AuctionHouseBot: Item {} sorted into YellowItemsBin", itr->second.ItemId);
+                if (YellowItemsSet.insert(itr->second.ItemId).second)
+                {
+                    YellowItemsBin.push_back(itr->second.ItemId);
+                    LOG_DEBUG("module", "AuctionHouseBot: Item {} sorted into YellowItemsBin", itr->second.ItemId);
+                }
+                else
+                {
+                    LOG_DEBUG("module", "AuctionHouseBot: Duplicate item {} not added to YellowItemsBin", itr->second.ItemId);
+                }
                 break;
             }
         }
+
     }
 
     // 
@@ -3334,6 +3450,22 @@ void AHBConfig::InitializeBins()
             PurpleItemsBin.clear();
             OrangeItemsBin.clear();
             YellowItemsBin.clear();
+
+            GreyTradeGoodsSet.clear();
+            WhiteTradeGoodsSet.clear();
+            GreenTradeGoodsSet.clear();
+            BlueTradeGoodsSet.clear();
+            PurpleTradeGoodsSet.clear();
+            OrangeTradeGoodsSet.clear();
+            YellowTradeGoodsSet.clear();
+            GreyItemsSet.clear();
+            WhiteItemsSet.clear();
+            GreenItemsSet.clear();
+            BlueItemsSet.clear();
+            PurpleItemsSet.clear();
+            OrangeItemsSet.clear();
+            YellowItemsSet.clear();
+
 
             AHBSeller = false;
 
