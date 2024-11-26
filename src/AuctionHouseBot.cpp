@@ -56,36 +56,46 @@ AuctionHouseBot::~AuctionHouseBot()
     // Nothing
 }
 
-uint32 AuctionHouseBot::getElement(const std::set<uint32>& set, int index, uint32 botId, uint32 maxDup, AuctionHouseObject* auctionHouse)
+uint32 AuctionHouseBot::getElement(const std::vector<uint32>& vec, int index, uint32 botId, uint32 maxDup, AuctionHouseObject* auctionHouse)
 {
-    std::set<uint32>::iterator it = set.begin();
-    std::advance(it, index);
+    // Ensure index is within bounds
+    if (index < 0 || index >= static_cast<int>(vec.size()))
+    {
+        return 0; // Index out of bounds
+    }
+
+    uint32 itemId = vec[index];
 
     if (maxDup > 0)
     {
         uint32 noStacks = 0;
 
+        // Iterate over the auctions in the auction house
         for (AuctionHouseObject::AuctionEntryMap::const_iterator itr = auctionHouse->GetAuctionsBegin(); itr != auctionHouse->GetAuctionsEnd(); ++itr)
         {
             AuctionEntry* Aentry = itr->second;
 
+            // Check if the auction belongs to the bot
             if (Aentry->owner.GetCounter() == botId)
             {
-                if (*it == Aentry->item_template)
+                // Check if the item ID matches
+                if (itemId == Aentry->item_template)
                 {
                     noStacks++;
                 }
             }
         }
 
+        // If the number of stacks exceeds or equals the maximum allowed, return 0
         if (noStacks >= maxDup)
         {
             return 0;
         }
     }
 
-    return *it;
+    return itemId;
 }
+
 
 uint32 AuctionHouseBot::getStackCount(AHBConfig* config, uint32 max)
 {
