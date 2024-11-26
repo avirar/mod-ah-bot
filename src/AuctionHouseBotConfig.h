@@ -340,19 +340,19 @@ public:
     uint32 GetPercentages    (uint32 color);
 
     void   SetMinPrice       (uint32 color, uint32 value);
-    uint32 GetMinPrice       (uint32 quality);
+    uint32 GetMinPrice       (uint32 color);
 
     void   SetMaxPrice       (uint32 color, uint32 value);
-    uint32 GetMaxPrice       (uint32 quality);
+    uint32 GetMaxPrice       (uint32 color);
 
     void   SetMinBidPrice    (uint32 color, uint32 value);
-    uint32 GetMinBidPrice    (uint32 quality);
+    uint32 GetMinBidPrice    (uint32 color);
 
     void   SetMaxBidPrice    (uint32 color, uint32 value);
-    uint32 GetMaxBidPrice    (uint32 quality);
+    uint32 GetMaxBidPrice    (uint32 color);
 
     void   SetMaxStack       (uint32 color, uint32 value);
-    uint32 GetMaxStack       (uint32 quality);
+    uint32 GetMaxStack       (uint32 color);
 
     void   SetBuyerPrice     (uint32 color, uint32 value);
     uint32 GetBuyerPrice     (uint32 color);
@@ -366,7 +366,10 @@ public:
     void   CalculatePercents ();
     uint32 GetMaximum        (uint32 color);
 
+    void   DecItemCounts     (uint32 Class, uint32 Quality);
     void   DecItemCounts     (uint32 color);
+
+    void   IncItemCounts     (uint32 Class, uint32 Quality)															
     void   IncItemCounts     (uint32 color);
 
     void   ResetItemCounts   ();
