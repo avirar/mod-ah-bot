@@ -17,6 +17,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+#include <unordered_map>
+#include <algorithm>
+#include <random>
 #include <ctime>
 #include <iomanip>
 #include <sstream>
@@ -533,280 +536,172 @@ void AuctionHouseBot::Buy(Player* AHBplayer, AHBConfig* config, WorldSession* se
 
 void AuctionHouseBot::Sell(Player* AHBplayer, AHBConfig* config)
 {
-    // 
     // Check if disabled
-    // 
-
     if (!config->AHBSeller)
-    {
         return;
-    }
 
-    // 
     // Check the given limits
-    // 
-
     uint32 minItems = config->GetMinItems();
     uint32 maxItems = config->GetMaxItems();
 
     if (maxItems == 0)
-    {
         return;
-    }
 
-    // 
     // Retrieve the auction house situation
-    // 
-
     AuctionHouseEntry const* ahEntry = sAuctionMgr->GetAuctionHouseEntry(config->GetAHFID());
-
     if (!ahEntry)
-    {
         return;
-    }
 
     AuctionHouseObject* auctionHouse = sAuctionMgr->GetAuctionsMap(config->GetAHFID());
-
     if (!auctionHouse)
-    {
         return;
-    }
 
     auctionHouse->Update();
 
-    // 
     // Check if we are clear to proceed
-    // 
-
-    bool   aboveMin = false;
-    bool   aboveMax = false;
     uint32 auctions = getNofAuctions(config, auctionHouse, AHBplayer->GetGUID());
-    uint32 items    = 0;
+    uint32 items = 0;
 
     if (auctions >= minItems)
     {
-        aboveMin = true;
-
         if (config->DebugOutSeller)
-        {
             LOG_ERROR("module", "AHBot [{}]: Auctions above minimum", _id);
-        }
-
         return;
     }
 
     if (auctions >= maxItems)
     {
-        aboveMax = true;
-
         if (config->DebugOutSeller)
-        {
             LOG_ERROR("module", "AHBot [{}]: Auctions at or above maximum", _id);
-        }
-
         return;
     }
 
-    if (auctions == 0) 
+    if (auctions == 0)
     {
         // If no bot auctions exist, populate the auction house up to minItems / 10
         items = minItems / 10;
-    } 
-    else if ((maxItems - auctions) >= config->ItemsPerCycle) 
+    }
+    else if ((maxItems - auctions) >= config->ItemsPerCycle)
     {
         items = config->ItemsPerCycle;
-    } 
-    else 
+    }
+    else
     {
         items = (maxItems - auctions);
     }
 
-    // 
     // Retrieve the configuration for this run
-    // 
+    std::unordered_map<uint32, uint32> maxCounts = {
+        {AHB_GREY_TG,   config->GetMaximum(AHB_GREY_TG)},
+        {AHB_WHITE_TG,  config->GetMaximum(AHB_WHITE_TG)},
+        {AHB_GREEN_TG,  config->GetMaximum(AHB_GREEN_TG)},
+        {AHB_BLUE_TG,   config->GetMaximum(AHB_BLUE_TG)},
+        {AHB_PURPLE_TG, config->GetMaximum(AHB_PURPLE_TG)},
+        {AHB_ORANGE_TG, config->GetMaximum(AHB_ORANGE_TG)},
+        {AHB_YELLOW_TG, config->GetMaximum(AHB_YELLOW_TG)},
+        {AHB_GREY_I,    config->GetMaximum(AHB_GREY_I)},
+        {AHB_WHITE_I,   config->GetMaximum(AHB_WHITE_I)},
+        {AHB_GREEN_I,   config->GetMaximum(AHB_GREEN_I)},
+        {AHB_BLUE_I,    config->GetMaximum(AHB_BLUE_I)},
+        {AHB_PURPLE_I,  config->GetMaximum(AHB_PURPLE_I)},
+        {AHB_ORANGE_I,  config->GetMaximum(AHB_ORANGE_I)},
+        {AHB_YELLOW_I,  config->GetMaximum(AHB_YELLOW_I)}
+    };
 
-    uint32 greyTGcount   = config->GetMaximum(AHB_GREY_TG);
-    uint32 whiteTGcount  = config->GetMaximum(AHB_WHITE_TG);
-    uint32 greenTGcount  = config->GetMaximum(AHB_GREEN_TG);
-    uint32 blueTGcount   = config->GetMaximum(AHB_BLUE_TG);
-    uint32 purpleTGcount = config->GetMaximum(AHB_PURPLE_TG);
-    uint32 orangeTGcount = config->GetMaximum(AHB_ORANGE_TG);
-    uint32 yellowTGcount = config->GetMaximum(AHB_YELLOW_TG);
+    std::unordered_map<uint32, uint32> currentCounts = {
+        {AHB_GREY_TG,   config->GetItemCounts(AHB_GREY_TG)},
+        {AHB_WHITE_TG,  config->GetItemCounts(AHB_WHITE_TG)},
+        {AHB_GREEN_TG,  config->GetItemCounts(AHB_GREEN_TG)},
+        {AHB_BLUE_TG,   config->GetItemCounts(AHB_BLUE_TG)},
+        {AHB_PURPLE_TG, config->GetItemCounts(AHB_PURPLE_TG)},
+        {AHB_ORANGE_TG, config->GetItemCounts(AHB_ORANGE_TG)},
+        {AHB_YELLOW_TG, config->GetItemCounts(AHB_YELLOW_TG)},
+        {AHB_GREY_I,    config->GetItemCounts(AHB_GREY_I)},
+        {AHB_WHITE_I,   config->GetItemCounts(AHB_WHITE_I)},
+        {AHB_GREEN_I,   config->GetItemCounts(AHB_GREEN_I)},
+        {AHB_BLUE_I,    config->GetItemCounts(AHB_BLUE_I)},
+        {AHB_PURPLE_I,  config->GetItemCounts(AHB_PURPLE_I)},
+        {AHB_ORANGE_I,  config->GetItemCounts(AHB_ORANGE_I)},
+        {AHB_YELLOW_I,  config->GetItemCounts(AHB_YELLOW_I)}
+    };
 
-    uint32 greyIcount    = config->GetMaximum(AHB_GREY_I);
-    uint32 whiteIcount   = config->GetMaximum(AHB_WHITE_I);
-    uint32 greenIcount   = config->GetMaximum(AHB_GREEN_I);
-    uint32 blueIcount    = config->GetMaximum(AHB_BLUE_I);
-    uint32 purpleIcount  = config->GetMaximum(AHB_PURPLE_I);
-    uint32 orangeIcount  = config->GetMaximum(AHB_ORANGE_I);
-    uint32 yellowIcount  = config->GetMaximum(AHB_YELLOW_I);
+    // Define item bins
+    struct ItemBin
+    {
+        std::vector<uint32>& bin;
+        uint32& currentCount;
+        uint32 maxCount;
+        uint32 choice;
+        uint32 adjustedDuplicates;
+    };
 
-    uint32 greyTGoods    = config->GetItemCounts(AHB_GREY_TG);
-    uint32 whiteTGoods   = config->GetItemCounts(AHB_WHITE_TG);
-    uint32 greenTGoods   = config->GetItemCounts(AHB_GREEN_TG);
-    uint32 blueTGoods    = config->GetItemCounts(AHB_BLUE_TG);
-    uint32 purpleTGoods  = config->GetItemCounts(AHB_PURPLE_TG);
-    uint32 orangeTGoods  = config->GetItemCounts(AHB_ORANGE_TG);
-    uint32 yellowTGoods  = config->GetItemCounts(AHB_YELLOW_TG);
+    // Initialize bins
+    std::vector<ItemBin> itemBins = {
+        // Poor Quality Items
+        {config->GreyItemsBin, currentCounts[AHB_GREY_I], maxCounts[AHB_GREY_I], 0, config->DuplicatesCount},
+        {config->GreyTradeGoodsBin, currentCounts[AHB_GREY_TG], maxCounts[AHB_GREY_TG], 7, config->DuplicatesCount},
+        // Normal Quality Items
+        {config->WhiteItemsBin, currentCounts[AHB_WHITE_I], maxCounts[AHB_WHITE_I], 1, config->DuplicatesCount},
+        {config->WhiteTradeGoodsBin, currentCounts[AHB_WHITE_TG], maxCounts[AHB_WHITE_TG], 8, config->DuplicatesCount},
+        // Uncommon Quality Items
+        {config->GreenItemsBin, currentCounts[AHB_GREEN_I], maxCounts[AHB_GREEN_I], 2, config->DuplicatesCount},
+        {config->GreenTradeGoodsBin, currentCounts[AHB_GREEN_TG], maxCounts[AHB_GREEN_TG], 9, config->DuplicatesCount},
+        // Rare Quality Items (adjusted duplicates)
+        {config->BlueItemsBin, currentCounts[AHB_BLUE_I], maxCounts[AHB_BLUE_I], 3, config->DuplicatesCount / 2},
+        {config->BlueTradeGoodsBin, currentCounts[AHB_BLUE_TG], maxCounts[AHB_BLUE_TG], 10, config->DuplicatesCount / 2},
+        // Epic Quality Items (adjusted duplicates)
+        {config->PurpleItemsBin, currentCounts[AHB_PURPLE_I], maxCounts[AHB_PURPLE_I], 4, config->DuplicatesCount / 4},
+        {config->PurpleTradeGoodsBin, currentCounts[AHB_PURPLE_TG], maxCounts[AHB_PURPLE_TG], 11, config->DuplicatesCount / 4},
+        // Legendary Quality Items
+        {config->OrangeItemsBin, currentCounts[AHB_ORANGE_I], maxCounts[AHB_ORANGE_I], 5, config->DuplicatesCount},
+        {config->OrangeTradeGoodsBin, currentCounts[AHB_ORANGE_TG], maxCounts[AHB_ORANGE_TG], 12, config->DuplicatesCount},
+        // Artifact Quality Items
+        {config->YellowItemsBin, currentCounts[AHB_YELLOW_I], maxCounts[AHB_YELLOW_I], 6, config->DuplicatesCount},
+        {config->YellowTradeGoodsBin, currentCounts[AHB_YELLOW_TG], maxCounts[AHB_YELLOW_TG], 13, config->DuplicatesCount}
+    };
 
-    uint32 greyItems     = config->GetItemCounts(AHB_GREY_I);
-    uint32 whiteItems    = config->GetItemCounts(AHB_WHITE_I);
-    uint32 greenItems    = config->GetItemCounts(AHB_GREEN_I);
-    uint32 blueItems     = config->GetItemCounts(AHB_BLUE_I);
-    uint32 purpleItems   = config->GetItemCounts(AHB_PURPLE_I);
-    uint32 orangeItems   = config->GetItemCounts(AHB_ORANGE_I);
-    uint32 yellowItems   = config->GetItemCounts(AHB_YELLOW_I);
-
-    //
     // Loop variables
-    //
+    uint32 noSold   = 0; // Tracing counter
+    uint32 binEmpty = 0; // Tracing counter
+    uint32 loopBrk  = 0; // Tracing counter
+    uint32 err      = 0; // Tracing counter
 
-    uint32 noSold    = 0; // Tracing counter
-    uint32 binEmpty  = 0; // Tracing counter
-    uint32 noNeed    = 0; // Tracing counter
-    uint32 tooMany   = 0; // Tracing counter
-    uint32 loopBrk   = 0; // Tracing counter
-    uint32 err       = 0; // Tracing counter
+    // Start a transaction outside the loop
+    auto trans = CharacterDatabase.BeginTransaction();
 
     for (uint32 cnt = 1; cnt <= items; cnt++)
     {
-        uint32 choice      = 0;
-        uint32 itemID      = 0;
+        uint32 itemID = 0;
+        uint32 choice = 0;
         uint32 loopbreaker = 0;
-
-        //
-        // Select, in rarity order, a new random item
-        //
 
         while (itemID == 0 && loopbreaker <= AUCTION_HOUSE_BOT_LOOP_BREAKER)
         {
             loopbreaker++;
 
-            // Poor
+            // Shuffle itemBins to add randomness
+            std::shuffle(itemBins.begin(), itemBins.end(), std::mt19937{std::random_device{}()});
 
-            if ((config->GreyItemsBin.size() > 0) && (greyItems < greyIcount))
+            for (auto& bin : itemBins)
             {
-                choice = 0;
-                itemID = getElement(config->GreyItemsBin, urand(0, config->GreyItemsBin.size() - 1), _id, config->DuplicatesCount, auctionHouse);
-            }
+                if (bin.bin.empty() || bin.currentCount >= bin.maxCount)
+                    continue;
 
-            if (itemID == 0 && (config->GreyTradeGoodsBin.size() > 0) && (greyTGoods < greyTGcount))
-            {
-                choice = 7;
-                itemID = getElement(config->GreyTradeGoodsBin, urand(0, config->GreyTradeGoodsBin.size() - 1), _id, config->DuplicatesCount, auctionHouse);
-            }
+                uint32 randomIndex = urand(0, bin.bin.size() - 1);
+                itemID = getElement(bin.bin, randomIndex, _id, bin.adjustedDuplicates, auctionHouse);
 
-            // Normal
-
-            if (itemID == 0 && (config->WhiteItemsBin.size() > 0) && (whiteItems < whiteIcount))
-            {
-                choice = 1;
-                itemID = getElement(config->WhiteItemsBin, urand(0, config->WhiteItemsBin.size() - 1), _id, config->DuplicatesCount, auctionHouse);
-            }
-
-            if (itemID == 0 && (config->WhiteTradeGoodsBin.size() > 0) && (whiteTGoods < whiteTGcount))
-            {
-                choice = 8;
-                itemID = getElement(config->WhiteTradeGoodsBin, urand(0, config->WhiteTradeGoodsBin.size() - 1), _id, config->DuplicatesCount, auctionHouse);
-            }
-
-            // Uncommon
-
-            if (itemID == 0 && (config->GreenItemsBin.size() > 0) && (greenItems < greenIcount))
-            {
-                choice = 2;
-                itemID = getElement(config->GreenItemsBin, urand(0, config->GreenItemsBin.size() - 1), _id, config->DuplicatesCount, auctionHouse);
-            }
-
-            if (itemID == 0 && (config->GreenTradeGoodsBin.size() > 0) && (greenTGoods < greenTGcount))
-            {
-                choice = 9;
-                itemID = getElement(config->GreenTradeGoodsBin, urand(0, config->GreenTradeGoodsBin.size() - 1), _id, config->DuplicatesCount, auctionHouse);
-            }
-
-            // Rare (Blue Items), config->DuplicatesCount / 2
-
-            if (itemID == 0 && !config->BlueItemsBin.empty() && (blueItems < blueIcount))
-            {
-                choice = 3;
-        
-                // Calculate adjusted DuplicatesCount for Blue Items
-                int adjustedDuplicates = (config->DuplicatesCount % 2 == 0) ? (config->DuplicatesCount / 2) : config->DuplicatesCount;
-        
-                itemID = getElement(config->BlueItemsBin, urand(0, config->BlueItemsBin.size() - 1), _id, adjustedDuplicates, auctionHouse);
-            }
-        
-            // Blue Trade Goods Bin
-            if (itemID == 0 && !config->BlueTradeGoodsBin.empty() && (blueTGoods < blueTGcount))
-            {
-                choice = 10;
-        
-                // Calculate adjusted DuplicatesCount for Blue Trade Goods
-                int adjustedDuplicates = (config->DuplicatesCount % 2 == 0) ? (config->DuplicatesCount / 2) : config->DuplicatesCount;
-        
-                itemID = getElement(config->BlueTradeGoodsBin, urand(0, config->BlueTradeGoodsBin.size() - 1), _id, adjustedDuplicates, auctionHouse);
-            }
-        
-            // Epic (Purple Items), config->DuplicatesCount / 4
-        
-            // Purple Items Bin
-            if (itemID == 0 && !config->PurpleItemsBin.empty() && (purpleItems < purpleIcount))
-            {
-                choice = 4;
-        
-                // Calculate adjusted DuplicatesCount for Epic Items
-                int adjustedDuplicates = (config->DuplicatesCount % 4 == 0) ? (config->DuplicatesCount / 4) : config->DuplicatesCount;
-        
-                itemID = getElement(config->PurpleItemsBin, urand(0, config->PurpleItemsBin.size() - 1), _id, adjustedDuplicates, auctionHouse);
-            }
-        
-            // Purple Trade Goods Bin
-            if (itemID == 0 && !config->PurpleTradeGoodsBin.empty() && (purpleTGoods < purpleTGcount))
-            {
-                choice = 11;
-        
-                // Calculate adjusted DuplicatesCount for Epic Trade Goods
-                int adjustedDuplicates = (config->DuplicatesCount % 4 == 0) ? (config->DuplicatesCount / 4) : config->DuplicatesCount;
-        
-                itemID = getElement(config->PurpleTradeGoodsBin, urand(0, config->PurpleTradeGoodsBin.size() - 1), _id, adjustedDuplicates, auctionHouse);
-            }
-            // Legendary
-
-            if (itemID == 0 && (config->OrangeItemsBin.size() > 0) && (orangeItems < orangeIcount))
-            {
-                choice = 5;
-                itemID = getElement(config->OrangeItemsBin, urand(0, config->OrangeItemsBin.size() - 1), _id, config->DuplicatesCount, auctionHouse);
-            }
-
-            if (itemID == 0 && (config->OrangeTradeGoodsBin.size() > 0) && (orangeTGoods < orangeTGcount))
-            {
-                choice = 12;
-                itemID = getElement(config->OrangeTradeGoodsBin, urand(0, config->OrangeTradeGoodsBin.size() - 1), _id, config->DuplicatesCount, auctionHouse);
-            }
-
-            // Artifact
-
-            if (itemID == 0 && (config->YellowItemsBin.size() > 0) && (yellowItems < yellowIcount))
-            {
-                choice = 6;
-                itemID = getElement(config->YellowItemsBin, urand(0, config->YellowItemsBin.size() - 1), _id, config->DuplicatesCount, auctionHouse);
-            }
-
-            if (itemID == 0 && (config->YellowTradeGoodsBin.size() > 0) && (yellowTGoods < yellowTGcount))
-            {
-                choice = 13;
-                itemID = getElement(config->YellowTradeGoodsBin, urand(0, config->YellowTradeGoodsBin.size() - 1), _id, config->DuplicatesCount, auctionHouse);
+                if (itemID != 0)
+                {
+                    choice = bin.choice;
+                    break;
+                }
             }
 
             if (itemID == 0)
             {
                 binEmpty++;
-            
                 if (config->DebugOutSeller)
-                {
                     LOG_ERROR("module", "AHBot [{}]: No item could be selected from the bins", _id);
-                }
-            
                 break;
             }
         }
@@ -817,233 +712,62 @@ void AuctionHouseBot::Sell(Player* AHBplayer, AHBConfig* config)
             continue;
         }
 
-        // 
         // Retrieve information about the selected item
-        // 
-
         ItemTemplate const* prototype = sObjectMgr->GetItemTemplate(itemID);
 
-        if (prototype == NULL)
+        if (!prototype)
         {
             err++;
-
             if (config->DebugOutSeller)
-            {
-                LOG_ERROR("module", "AHBot [{}]: could not get prototype of item {}", _id, itemID);
-            }
-
+                LOG_ERROR("module", "AHBot [{}]: Could not get prototype of item {}", _id, itemID);
             continue;
         }
 
         Item* item = Item::CreateItem(itemID, 1, AHBplayer);
 
-        if (item == NULL)
+        if (!item)
         {
             err++;
-
             if (config->DebugOutSeller)
-            {
-                LOG_ERROR("module", "AHBot [{}]: could not create item from prototype {}", _id, itemID);
-            }
-
+                LOG_ERROR("module", "AHBot [{}]: Could not create item from prototype {}", _id, itemID);
             continue;
         }
 
-        // 
         // Start interacting with the item by adding a random property
-        // 
-
         item->AddToUpdateQueueOf(AHBplayer);
 
         uint32 randomPropertyId = Item::GenerateItemRandomPropertyId(itemID);
 
         if (randomPropertyId != 0)
-        {
             item->SetItemRandomProperties(randomPropertyId);
-        }
 
         if (prototype->Quality > AHB_MAX_QUALITY)
         {
             err++;
-
             if (config->DebugOutSeller)
-            {
                 LOG_ERROR("module", "AHBot [{}]: Quality {} TOO HIGH for item {}", _id, prototype->Quality, itemID);
-            }
 
             item->RemoveFromUpdateQueueOf(AHBplayer);
             continue;
         }
 
-        // 
         // Determine the price
-        // 
+        uint64 buyoutPrice = CalculateItemPrice(prototype, config);
+        uint64 bidPrice = buyoutPrice * urand(config->GetMinBidPrice(prototype->Quality), config->GetMaxBidPrice(prototype->Quality)) / 100;
 
-        uint64 buyoutPrice = 0;
-        uint64 bidPrice    = 0;
-        uint32 stackCount  = 1;
-
-        if (config->SellAtMarketPrice)
-        {
-            buyoutPrice = config->GetItemPrice(itemID);
-        }
-
-        if (buyoutPrice == 0)
-        {
-            if (config->SellMethod)
-            {
-                buyoutPrice = prototype->BuyPrice;
-            }
-            else
-            {
-                buyoutPrice = prototype->SellPrice;
-            }
-        }
-
-        //
-        // If the buyout price is still zero, determine a random one using the item level and quality
-        //
-
-        if (config->SellZeroPriceItems)
-        {
-            if (buyoutPrice == 0)
-            {
-                // Step 1: Calculate base price based on item level
-                int basePrice = urand(prototype->ItemLevel, prototype->ItemLevel + 10) * 10;
-        
-                // Step 2: Determine the quality multiplier
-                int qualityMultiplier = 1; // Default multiplier
-        
-                switch (prototype->Quality)
-                {
-                    case ITEM_QUALITY_POOR:
-                        qualityMultiplier = 1;
-                        break;
-                    case ITEM_QUALITY_NORMAL:
-                        qualityMultiplier = 2;
-                        break;
-                    case ITEM_QUALITY_UNCOMMON:
-                        qualityMultiplier = 5;
-                        break;
-                    case ITEM_QUALITY_RARE:
-                        qualityMultiplier = 10;
-                        break;
-                    case ITEM_QUALITY_EPIC:
-                        qualityMultiplier = 20;
-                        break;
-                    case ITEM_QUALITY_LEGENDARY:
-                        qualityMultiplier = 50;
-                        break;
-                    case ITEM_QUALITY_ARTIFACT:
-                        qualityMultiplier = 50;
-                        break;
-                    default:
-                        // Handle unknown quality, possibly set to a default multiplier
-                        qualityMultiplier = 1; // Example default
-                        break;
-                }
-        
-                // Step 3: Apply the quality multiplier to the base price
-                buyoutPrice = basePrice * qualityMultiplier;
-        
-                // Optional: Adjust scaling if necessary
-                // buyoutPrice = buyoutPrice / 100;
-        
-                if (buyoutPrice <= 0)
-                {
-                    if (config->DebugOutSeller)
-                    {
-                        LOG_ERROR("module", "AHBot [{}]: Could not determine a price for item {} of quality {} (min={}, max={})", _id, itemID, prototype->Quality, config->GetMinPrice(prototype->Quality), config->GetMaxPrice(prototype->Quality));
-                    }
-        
-                    item->RemoveFromUpdateQueueOf(AHBplayer);
-                    continue;
-                }
-            }
-        }
-        
-        // Continue with the existing price adjustment
-        buyoutPrice = buyoutPrice * urand(config->GetMinPrice(prototype->Quality), config->GetMaxPrice(prototype->Quality));
-        buyoutPrice = buyoutPrice / 25;
-
-
-        bidPrice    = buyoutPrice * urand(config->GetMinBidPrice(prototype->Quality), config->GetMaxBidPrice(prototype->Quality));
-        bidPrice    = bidPrice / 100;
-
-        // 
         // Determine the stack size
-        // 
-
-        uint32 maxStackConfig = config->GetMaxStack(prototype->Quality);
-        uint32 itemMaxStack = item->GetMaxStackCount();
-    
-        if (maxStackConfig > 1 && itemMaxStack > 1)
-        {
-            // Use the minimum of the configured max stack and the item's max stack count
-            stackCount = std::min(getStackCount(config, itemMaxStack), maxStackConfig);
-        }
-        else if (maxStackConfig == 0 && itemMaxStack > 1)
-        {
-            // Determine stackCount based on the item's quality
-            switch (prototype->Quality)
-            {
-                // Use Maxstack size for white and green item
-                case ITEM_QUALITY_NORMAL:    // WHITE
-                case ITEM_QUALITY_UNCOMMON:  // GREEN
-                    stackCount = urand(1, itemMaxStack);
-                    break;
-
-                case ITEM_QUALITY_RARE:      // BLUE
-                    // If divisible by 2, use half; otherwise, use full
-                    if (itemMaxStack % 2 == 0)
-                        stackCount = urand(1, itemMaxStack / 2);
-                    else
-                        stackCount = urand(1, itemMaxStack);
-                    break;
-    
-                case ITEM_QUALITY_EPIC:      // PURPLE
-                    // If divisible by 4, use quarter; otherwise, use full
-                    if (itemMaxStack % 4 == 0)
-                        stackCount = urand(1, itemMaxStack / 4);
-                    else
-                        stackCount = urand(1, itemMaxStack);
-                    break;
-    
-                // You can add more cases here for other qualities if needed
-                
-                default:
-                    // For qualities like LEGENDARY, ARTIFACT, HEIRLOOM, etc., default to full stack count
-                    stackCount = 1;
-                    break;
-            }
-        }
-        else
-        {
-            // Default stack count
-            stackCount = 1;
-        }
+        uint32 stackCount = DetermineStackSize(prototype, config);
 
         item->SetCount(stackCount);
 
-        // 
         // Determine the auction time
-        // 
-
         uint32 etime = getElapsedTime(config->ElapsingTimeClass);
 
-        // 
         // Determine the deposit
-        // 
+        uint32 dep = sAuctionMgr->GetAuctionDeposit(ahEntry, etime, item, stackCount);
 
-        uint32 dep   = sAuctionMgr->GetAuctionDeposit(ahEntry, etime, item, stackCount);
-
-        // 
         // Perform the auction
-        // 
-
-        auto trans = CharacterDatabase.BeginTransaction();
-
-        AuctionEntry* auctionEntry      = new AuctionEntry();
+        AuctionEntry* auctionEntry = new AuctionEntry();
         auctionEntry->Id                = sObjectMgr->GenerateAuctionID();
         auctionEntry->houseId           = config->GetAHID();
         auctionEntry->item_guid         = item->GetGUID();
@@ -1063,76 +787,12 @@ void AuctionHouseBot::Sell(Player* AHBplayer, AHBConfig* config)
         auctionHouse->AddAuction(auctionEntry);
         auctionEntry->SaveToDB(trans);
 
-        CharacterDatabase.CommitTransaction(trans);
-
-        // 
-        // Increments the number of items presents in the auction
-        // 
-
-        switch (choice)
-        {
-        case 0:
-            ++greyItems;
-            break;
-
-        case 1:
-            ++whiteItems;
-            break;
-
-        case 2:
-            ++greenItems;
-            break;
-
-        case 3:
-            ++blueItems;
-            break;
-
-        case 4:
-            ++purpleItems;
-            break;
-
-        case 5:
-            ++orangeItems;
-            break;
-
-        case 6:
-            ++yellowItems;
-            break;
-
-        case 7:
-            ++greyTGoods;
-            break;
-
-        case 8:
-            ++whiteTGoods;
-            break;
-
-        case 9:
-            ++greenTGoods;
-            break;
-
-        case 10:
-            ++blueTGoods;
-            break;
-
-        case 11:
-            ++purpleTGoods;
-            break;
-
-        case 12:
-            ++orangeTGoods;
-            break;
-
-        case 13:
-            ++yellowTGoods;
-            break;
-
-        default:
-            break;
-        }
+        // Increment the number of items present in the auction
+        auto it = currentCounts.find(choice);
+        if (it != currentCounts.end())
+            ++(it->second);
 
         noSold++;
-
 
         if (config->TraceSeller)
         {
@@ -1155,23 +815,110 @@ void AuctionHouseBot::Sell(Player* AHBplayer, AHBConfig* config)
                     formattedExpireTime = "Invalid Time";
                 }
             }
-    
-            // **Log the new auction entry with expire_time**
-            LOG_INFO("module", "AHBot [{}]: New stack ah={}, id={}, stack={}, bid={}, buyout={}, expire_time={}", 
-                _id, 
-                config->GetAHID(), 
-                itemID, 
-                stackCount, 
-                auctionEntry->startbid, 
-                auctionEntry->buyout, 
+
+            // Log the new auction entry with expire_time
+            LOG_INFO("module", "AHBot [{}]: New stack ah={}, id={}, stack={}, bid={}, buyout={}, expire_time={}",
+                _id,
+                config->GetAHID(),
+                itemID,
+                stackCount,
+                auctionEntry->startbid,
+                auctionEntry->buyout,
                 formattedExpireTime);
         }
     }
+
+    // Commit the transaction after processing all items
+    CharacterDatabase.CommitTransaction(trans);
+
     if (config->TraceSeller)
     {
-        LOG_INFO("module", "AHBot [{}]: auctionhouse {}, req={}, sold={}, aboveMin={}, aboveMax={}, loopBrk={}, noNeed={}, tooMany={}, binEmpty={}, err={}", _id, config->GetAHID(), items, noSold, aboveMin, aboveMax, loopBrk, noNeed, tooMany, binEmpty, err);
+        LOG_INFO("module", "AHBot [{}]: auctionhouse {}, req={}, sold={}, loopBrk={}, binEmpty={}, err={}",
+            _id, config->GetAHID(), items, noSold, loopBrk, binEmpty, err);
     }
 }
+
+uint64 AuctionHouseBot::CalculateItemPrice(const ItemTemplate* prototype, AHBConfig* config)
+{
+    uint64 price = 0;
+
+    if (config->SellAtMarketPrice)
+    {
+        price = config->GetItemPrice(prototype->ItemId);
+    }
+
+    if (price == 0)
+    {
+        price = config->SellMethod ? prototype->BuyPrice : prototype->SellPrice;
+    }
+
+    if (config->SellZeroPriceItems && price == 0)
+    {
+        // Determine base price based on item level
+        int basePrice = urand(prototype->ItemLevel, prototype->ItemLevel + 10) * 10;
+
+        // Determine the quality multiplier
+        int qualityMultiplier = GetQualityMultiplier(prototype->Quality);
+
+        // Apply the quality multiplier to the base price
+        price = basePrice * qualityMultiplier;
+    }
+
+    if (price == 0)
+    {
+        // Handle error or assign a default price
+        if (config->DebugOutSeller)
+            LOG_ERROR("module", "AHBot [{}]: Could not determine a price for item {} of quality {}", _id, prototype->ItemId, prototype->Quality);
+        return 0;
+    }
+
+    // Apply random modifiers based on quality
+    price *= urand(config->GetMinPrice(prototype->Quality), config->GetMaxPrice(prototype->Quality));
+    price /= 25;
+
+    return price;
+}
+
+int AuctionHouseBot::GetQualityMultiplier(uint32 quality)
+{
+    switch (quality)
+    {
+        case ITEM_QUALITY_POOR:      return 1;
+        case ITEM_QUALITY_NORMAL:    return 2;
+        case ITEM_QUALITY_UNCOMMON:  return 5;
+        case ITEM_QUALITY_RARE:      return 10;
+        case ITEM_QUALITY_EPIC:      return 20;
+        case ITEM_QUALITY_LEGENDARY:
+        case ITEM_QUALITY_ARTIFACT:  return 50;
+        default:                     return 1;
+    }
+}
+
+uint32 AuctionHouseBot::DetermineStackSize(const ItemTemplate* prototype, AHBConfig* config)
+{
+    uint32 maxStackConfig = config->GetMaxStack(prototype->Quality);
+    uint32 itemMaxStack = prototype->GetMaxStackSize();
+
+    if (maxStackConfig == 0 || itemMaxStack <= 1)
+        return 1;
+
+    uint32 maxAllowedStack = std::min(maxStackConfig, itemMaxStack);
+
+    // Adjust stack size based on item quality
+    uint32 divisor = GetStackDivisor(prototype->Quality);
+    uint32 maxStack = maxAllowedStack / divisor;
+    return urand(1, maxStack > 0 ? maxStack : 1);
+}
+uint32 AuctionHouseBot::GetStackDivisor(uint32 quality)
+{
+    switch (quality)
+    {
+        case ITEM_QUALITY_RARE:     return 2;
+        case ITEM_QUALITY_EPIC:     return 4;
+        default:                    return 1;
+    }
+}
+
 
 // =============================================================================
 // Perform an update cycle
