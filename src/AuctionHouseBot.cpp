@@ -928,11 +928,10 @@ uint32 AuctionHouseBot::DetermineStackSize(ItemTemplate const* prototype, AHBCon
     // Retrieve the stack divisor based on item quality
     uint32 stackDivisor = GetStackDivisor(prototype->Quality);
     
-    // Adjust maxStack using the divisor, ensuring it doesn't become zero
-    if (stackDivisor > 1)
+    // Adjust maxStack using the divisor only if the result is an integer
+    if (stackDivisor > 1 && maxStack % stackDivisor == 0)
     {
-        // Adjust maxStack with ceiling division to avoid zero stack size
-        maxStack = (maxStack + stackDivisor - 1) / stackDivisor;
+        maxStack = maxStack / stackDivisor;
     }
     
     // Ensure maxStack is at least 1
