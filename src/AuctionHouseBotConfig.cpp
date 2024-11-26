@@ -1380,56 +1380,21 @@ void AHBConfig::SetMaxStack(uint32 color, uint32 value)
     }
 }
 
-uint32 AHBConfig::GetMaxStack(uint32 color)
+uint32 AHBConfig::GetMaxStack(uint32 quality)
 {
-    switch (color)
+    switch (quality)
     {
-    case AHB_GREY:
-    {
-        return maxStackGrey;
-        break;
-    }
-
-    case AHB_WHITE:
-    {
-        return maxStackWhite;
-        break;
-    }
-
-    case AHB_GREEN:
-    {
-        return maxStackGreen;
-        break;
-    }
-
-    case AHB_BLUE:
-    {
-        return maxStackBlue;
-        break;
-    }
-
-    case AHB_PURPLE:
-    {
-        return maxStackPurple;
-        break;
-    }
-
-    case AHB_ORANGE:
-    {
-        return maxStackOrange;
-        break;
-    }
-
-    case AHB_YELLOW:
-    {
-        return maxStackYellow;
-        break;
-    }
-
-    default:
-        return 0;
+        case ITEM_QUALITY_POOR:      return maxStackGrey;
+        case ITEM_QUALITY_NORMAL:    return maxStackWhite;
+        case ITEM_QUALITY_UNCOMMON:  return maxStackGreen;
+        case ITEM_QUALITY_RARE:      return maxStackBlue;
+        case ITEM_QUALITY_EPIC:      return maxStackPurple;
+        case ITEM_QUALITY_LEGENDARY: return maxStackOrange;
+        case ITEM_QUALITY_ARTIFACT:  return maxStackYellow;
+        default:                     return 1;
     }
 }
+
 
 void AHBConfig::SetBuyerPrice(uint32 color, uint32 value)
 {
