@@ -310,6 +310,29 @@ public:
     std::vector<uint32> YellowItemsBin;
 
     //
+    // Sets for bins
+    //
+
+    // Sets for trade goods
+    std::unordered_set<uint32> GreyTradeGoodsSet;
+    std::unordered_set<uint32> WhiteTradeGoodsSet;
+    std::unordered_set<uint32> GreenTradeGoodsSet;
+    std::unordered_set<uint32> BlueTradeGoodsSet;
+    std::unordered_set<uint32> PurpleTradeGoodsSet;
+    std::unordered_set<uint32> OrangeTradeGoodsSet;
+    std::unordered_set<uint32> YellowTradeGoodsSet;
+    
+    // Sets for items
+    std::unordered_set<uint32> GreyItemsSet;
+    std::unordered_set<uint32> WhiteItemsSet;
+    std::unordered_set<uint32> GreenItemsSet;
+    std::unordered_set<uint32> BlueItemsSet;
+    std::unordered_set<uint32> PurpleItemsSet;
+    std::unordered_set<uint32> OrangeItemsSet;
+    std::unordered_set<uint32> YellowItemsSet;
+
+
+    //
     // Constructors/destructors
     //
 
