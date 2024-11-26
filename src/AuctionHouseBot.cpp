@@ -927,7 +927,7 @@ uint32 AuctionHouseBot::DetermineStackSize(ItemTemplate const* prototype, AHBCon
 
         if (config->DebugOutSeller)
         {
-            LOG_INFO("module", "AHBot [{}]: Item {} max stack: itemMaxStack={}, configMaxStack={}, determined stackCount={}",
+            LOG_ERROR("module", "AHBot [{}]: Item {} max stack: itemMaxStack={}, configMaxStack={}, determined stackCount={}",
                 _id, prototype->ItemId, itemMaxStack, configMaxStack, stackCount);
         }
 
