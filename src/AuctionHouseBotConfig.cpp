@@ -286,94 +286,30 @@ AHBConfig::AHBConfig(uint32 ahid, AHBConfig* conf)
         SellerWhiteList.insert(id);
     }
 
-    GreyTradeGoodsBin.clear();
-    for (uint32 id: conf->GreyTradeGoodsBin)
-    {
-        GreyTradeGoodsBin.insert(id);
-    }
-
-    WhiteTradeGoodsBin.clear();
-    for (uint32 id: conf->WhiteTradeGoodsBin)
-    {
-        WhiteTradeGoodsBin.insert(id);
-    }
-
-    GreenTradeGoodsBin.clear();
-    for (uint32 id: conf->GreenTradeGoodsBin)
-    {
-        GreenTradeGoodsBin.insert(id);
-    }
-
-    BlueTradeGoodsBin.clear();
-    for (uint32 id: conf->BlueTradeGoodsBin)
-    {
-        BlueTradeGoodsBin.insert(id);
-    }
-
-    PurpleTradeGoodsBin.clear();
-    for (uint32 id: conf->PurpleTradeGoodsBin)
-    {
-        PurpleTradeGoodsBin.insert(id);
-    }
-
-    OrangeTradeGoodsBin.clear();
-    for (uint32 id: conf->OrangeTradeGoodsBin)
-    {
-        OrangeTradeGoodsBin.insert(id);
-    }
-
-    YellowTradeGoodsBin.clear();
-    for (uint32 id: conf->YellowTradeGoodsBin)
-    {
-        YellowTradeGoodsBin.insert(id);
-    }
-
-
+    //
+    // Bins for trade goods
+    //
+    
+    GreyTradeGoodsBin = conf->GreyTradeGoodsBin;
+    WhiteTradeGoodsBin = conf->WhiteTradeGoodsBin;
+    GreenTradeGoodsBin = conf->GreenTradeGoodsBin;
+    BlueTradeGoodsBin = conf->BlueTradeGoodsBin;
+    PurpleTradeGoodsBin = conf->PurpleTradeGoodsBin;
+    OrangeTradeGoodsBin = conf->OrangeTradeGoodsBin;
+    YellowTradeGoodsBin = conf->YellowTradeGoodsBin;
+    
     //
     // Bins for items
     //
+    
+    GreyItemsBin = conf->GreyItemsBin;
+    WhiteItemsBin = conf->WhiteItemsBin;
+    GreenItemsBin = conf->GreenItemsBin;
+    BlueItemsBin = conf->BlueItemsBin;
+    PurpleItemsBin = conf->PurpleItemsBin;
+    OrangeItemsBin = conf->OrangeItemsBin;
+    YellowItemsBin = conf->YellowItemsBin;
 
-    GreyItemsBin.clear();
-    for (uint32 id: conf->GreyItemsBin)
-    {
-        GreyItemsBin.insert(id);
-    }
-
-    WhiteItemsBin.clear();
-    for (uint32 id: conf->WhiteItemsBin)
-    {
-        WhiteItemsBin.insert(id);
-    }
-
-    GreenItemsBin.clear();
-    for (uint32 id: conf->GreenItemsBin)
-    {
-        GreenItemsBin.insert(id);
-    }
-
-    BlueItemsBin.clear();
-    for (uint32 id: conf->BlueItemsBin)
-    {
-        BlueItemsBin.insert(id);
-    }
-
-    PurpleItemsBin.clear();
-    for (uint32 id: conf->PurpleItemsBin)
-    {
-        PurpleItemsBin.insert(id);
-    }
-
-    OrangeItemsBin.clear();
-    for (uint32 id: conf->OrangeItemsBin)
-    {
-        OrangeItemsBin.insert(id);
-    }
-
-    YellowItemsBin.clear();
-    for (uint32 id: conf->YellowItemsBin)
-    {
-        YellowItemsBin.insert(id);
-    }
 }
 
 AHBConfig::~AHBConfig()
