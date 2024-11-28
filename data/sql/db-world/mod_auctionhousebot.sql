@@ -9,17 +9,17 @@ CREATE TABLE `mod_auctionhousebot` (
   `minitems` int(11) DEFAULT '0' COMMENT 'This is the minimum number of items you want to keep in the auction house. a 0 here will make it the same as the maximum.',
   `maxitems` int(11) DEFAULT '50000' COMMENT 'This is the number of items you want to keep in the auction house.',
   `percentgreytradegoods` int(11) DEFAULT '0' COMMENT 'Sets the percentage of the Grey Trade Goods auction items',
-  `percentwhitetradegoods` int(11) DEFAULT '27' COMMENT 'Sets the percentage of the White Trade Goods auction items',
-  `percentgreentradegoods` int(11) DEFAULT '12' COMMENT 'Sets the percentage of the Green Trade Goods auction items',
-  `percentbluetradegoods` int(11) DEFAULT '10' COMMENT 'Sets the percentage of the Blue Trade Goods auction items',
+  `percentwhitetradegoods` int(11) DEFAULT '20' COMMENT 'Sets the percentage of the White Trade Goods auction items',
+  `percentgreentradegoods` int(11) DEFAULT '3' COMMENT 'Sets the percentage of the Green Trade Goods auction items',
+  `percentbluetradegoods` int(11) DEFAULT '1' COMMENT 'Sets the percentage of the Blue Trade Goods auction items',
   `percentpurpletradegoods` int(11) DEFAULT '1' COMMENT 'Sets the percentage of the Purple Trade Goods auction items',
   `percentorangetradegoods` int(11) DEFAULT '0' COMMENT 'Sets the percentage of the Orange Trade Goods auction items',
   `percentyellowtradegoods` int(11) DEFAULT '0' COMMENT 'Sets the percentage of the Yellow Trade Goods auction items',
   `percentgreyitems` int(11) DEFAULT '0' COMMENT 'Sets the percentage of the non trade Grey auction items',
-  `percentwhiteitems` int(11) DEFAULT '15' COMMENT 'Sets the percentage of the non trade White auction items',
-  `percentgreenitems` int(11) DEFAULT '25' COMMENT 'Sets the percentage of the non trade Green auction items',
-  `percentblueitems` int(11) DEFAULT '8' COMMENT 'Sets the percentage of the non trade Blue auction items',
-  `percentpurpleitems` int(11) DEFAULT '2' COMMENT 'Sets the percentage of the non trade Purple auction items',
+  `percentwhiteitems` int(11) DEFAULT '20' COMMENT 'Sets the percentage of the non trade White auction items',
+  `percentgreenitems` int(11) DEFAULT '28' COMMENT 'Sets the percentage of the non trade Green auction items',
+  `percentblueitems` int(11) DEFAULT '20' COMMENT 'Sets the percentage of the non trade Blue auction items',
+  `percentpurpleitems` int(11) DEFAULT '7' COMMENT 'Sets the percentage of the non trade Purple auction items',
   `percentorangeitems` int(11) DEFAULT '0' COMMENT 'Sets the percentage of the non trade Orange auction items',
   `percentyellowitems` int(11) DEFAULT '0' COMMENT 'Sets the percentage of the non trade Yellow auction items',
   `minpricegrey` int(11) DEFAULT '100' COMMENT 'Minimum price of Grey items (percentage).',
@@ -75,9 +75,9 @@ CREATE TABLE `mod_auctionhousebot` (
 
 INSERT INTO `mod_auctionhousebot` (`auctionhouse`, `name`, `minitems`, `maxitems`, `percentgreytradegoods`, `percentwhitetradegoods`, `percentgreentradegoods`, `percentbluetradegoods`, `percentpurpletradegoods`, `percentorangetradegoods`, `percentyellowtradegoods`, `percentgreyitems`, `percentwhiteitems`, `percentgreenitems`, `percentblueitems`, `percentpurpleitems`, `percentorangeitems`, `percentyellowitems`, `minpricegrey`, `maxpricegrey`, `minpricewhite`, `maxpricewhite`, `minpricegreen`, `maxpricegreen`, `minpriceblue`, `maxpriceblue`, `minpricepurple`, `maxpricepurple`, `minpriceorange`, `maxpriceorange`, `minpriceyellow`, `maxpriceyellow`, `minbidpricegrey`, `maxbidpricegrey`, `minbidpricewhite`, `maxbidpricewhite`, `minbidpricegreen`, `maxbidpricegreen`, `minbidpriceblue`, `maxbidpriceblue`, `minbidpricepurple`, `maxbidpricepurple`, `minbidpriceorange`, `maxbidpriceorange`, `minbidpriceyellow`, `maxbidpriceyellow`, `maxstackgrey`, `maxstackwhite`, `maxstackgreen`, `maxstackblue`, `maxstackpurple`, `maxstackorange`, `maxstackyellow`, `buyerpricegrey`, `buyerpricewhite`, `buyerpricegreen`, `buyerpriceblue`, `buyerpricepurple`, `buyerpriceorange`, `buyerpriceyellow`, `buyerbiddinginterval`, `buyerbidsperinterval`)
 VALUES
-(2,'Alliance',50000,50000,0,27,12,10,1,0,0,0,15,25,8,2,0,0,100,150,150,250,800,1400,1250,1750,2250,4550,3250,5550,5250,6550,70,100,70,100,80,100,75,100,80,100,80,100,80,100,0,0,0,0,0,1,1,1,3,5,12,15,20,22,1,1),
-(6,'Horde',50000,50000,0,27,12,10,1,0,0,0,15,25,8,2,0,0,100,150,150,250,800,1400,1250,1750,2250,4550,3250,5550,5250,6550,70,100,70,100,80,100,75,100,80,100,80,100,80,100,0,0,0,0,0,1,1,1,3,5,12,15,20,22,1,1),
-(7,'Neutral',50000,50000,0,27,12,10,1,0,0,0,15,25,8,2,0,0,100,150,150,250,800,1400,1250,1750,2250,4550,3250,5550,5250,6550,70,100,70,100,80,100,75,100,80,100,80,100,80,100,0,0,0,0,0,1,1,1,3,5,12,15,20,22,1,1);
+(2,'Alliance',50000,50000,0,20,3,1,1,0,0,0,20,28,20,7,0,0,100,150,150,250,800,1400,1250,1750,2250,4550,3250,5550,5250,6550,70,100,70,100,80,100,75,100,80,100,80,100,80,100,0,0,0,0,0,1,1,1,3,5,12,15,20,22,1,1),
+(6,'Horde',50000,50000,0,20,3,1,1,0,0,0,20,28,20,7,0,0,100,150,150,250,800,1400,1250,1750,2250,4550,3250,5550,5250,6550,70,100,70,100,80,100,75,100,80,100,80,100,80,100,0,0,0,0,0,1,1,1,3,5,12,15,20,22,1,1),
+(7,'Neutral',50000,50000,0,20,3,1,1,0,0,0,20,28,20,7,0,0,100,150,150,250,800,1400,1250,1750,2250,4550,3250,5550,5250,6550,70,100,70,100,80,100,75,100,80,100,80,100,80,100,0,0,0,0,0,1,1,1,3,5,12,15,20,22,1,1);
 
 --
 -- Items blacklist
