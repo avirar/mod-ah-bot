@@ -988,19 +988,12 @@ void AuctionHouseBot::Update()
 {
     time_t _newrun = time(NULL);
 
-    //
-    // If no configuration is associated, then stop here
-    //
-
     if (!_allianceConfig && !_hordeConfig && !_neutralConfig)
     {
         return;
     }
 
-    //
-    // Preprare for operation
-    //
-
+    // Prepare for operation
     std::string accountName = "AuctionHouseBot" + std::to_string(_account);
 
     WorldSession _session(_account, std::move(accountName), nullptr, SEC_PLAYER, sWorld->getIntConfig(CONFIG_EXPANSION), 0, LOCALE_enUS, 0, false, false, 0);
@@ -1010,61 +1003,55 @@ void AuctionHouseBot::Update()
 
     ObjectAccessor::AddObject(&_AHBplayer);
 
-    //
-    // Perform update for the factions markets
-    //
-
-    if (!sWorld->getBoolConfig(CONFIG_ALLOW_TWO_SIDE_INTERACTION_AUCTION))
+    switch (_nextFactionToProcess)
     {
-        //
-        // Alliance
-        //
-
-        if (_allianceConfig)
-        {
-            Sell(&_AHBplayer, _allianceConfig);
-
-            if (((_newrun - _lastrun_a_sec) >= (_allianceConfig->GetBiddingInterval() * MINUTE)) && (_allianceConfig->GetBidsPerInterval() > 0))
+        case 0:
+            // Alliance
+            if (_allianceConfig)
             {
-                Buy(&_AHBplayer, _allianceConfig, &_session);
-                _lastrun_a_sec = _newrun;
+                Sell(&_AHBplayer, _allianceConfig);
+
+                if (((_newrun - _lastrun_a_sec) >= (_allianceConfig->GetBiddingInterval() * MINUTE)) && (_allianceConfig->GetBidsPerInterval() > 0))
+                {
+                    Buy(&_AHBplayer, _allianceConfig, &_session);
+                    _lastrun_a_sec = _newrun;
+                }
             }
-        }
-
-        //
-        // Horde
-        //
-
-        if (_hordeConfig)
-        {
-            Sell(&_AHBplayer, _hordeConfig);
-
-            if (((_newrun - _lastrun_h_sec) >= (_hordeConfig->GetBiddingInterval() * MINUTE)) && (_hordeConfig->GetBidsPerInterval() > 0))
+            break;
+        case 1:
+            // Horde
+            if (_hordeConfig)
             {
-                Buy(&_AHBplayer, _hordeConfig, &_session);
-                _lastrun_h_sec = _newrun;
-            }
-        }
+                Sell(&_AHBplayer, _hordeConfig);
 
+                if (((_newrun - _lastrun_h_sec) >= (_hordeConfig->GetBiddingInterval() * MINUTE)) && (_hordeConfig->GetBidsPerInterval() > 0))
+                {
+                    Buy(&_AHBplayer, _hordeConfig, &_session);
+                    _lastrun_h_sec = _newrun;
+                }
+            }
+            break;
+        case 2:
+            // Neutral
+            if (_neutralConfig)
+            {
+                Sell(&_AHBplayer, _neutralConfig);
+
+                if (((_newrun - _lastrun_n_sec) >= (_neutralConfig->GetBiddingInterval() * MINUTE)) && (_neutralConfig->GetBidsPerInterval() > 0))
+                {
+                    Buy(&_AHBplayer, _neutralConfig, &_session);
+                    _lastrun_n_sec = _newrun;
+                }
+            }
+            break;
     }
 
-    //
-    // Neutral
-    //
-
-    if (_neutralConfig)
-    {
-        Sell(&_AHBplayer, _neutralConfig);
-
-        if (((_newrun - _lastrun_n_sec) >= (_neutralConfig->GetBiddingInterval() * MINUTE)) && (_neutralConfig->GetBidsPerInterval() > 0))
-        {
-            Buy(&_AHBplayer, _neutralConfig, &_session);
-            _lastrun_n_sec = _newrun;
-        }
-    }
+    // Update the faction to process next time
+    _nextFactionToProcess = (_nextFactionToProcess + 1) % 3;
 
     ObjectAccessor::RemoveObject(&_AHBplayer);
 }
+
 
 // =============================================================================
 // Execute commands coming from the console
