@@ -20,6 +20,7 @@
 #include <unordered_map>
 #include <algorithm>
 #include <random>
+#include <cctype>
 #include <ctime>
 #include <iomanip>
 #include <sstream>
@@ -911,10 +912,59 @@ int AuctionHouseBot::GetQualityMultiplier(uint32 quality)
     }
 }
 
-uint32 AuctionHouseBot::DetermineStackSize(ItemTemplate const* prototype, AHBConfig* config)
+uint32_t AuctionHouseBot::DetermineStackSize(ItemTemplate const* prototype, AHBConfig* config)
 {
-    uint32 itemMaxStack = prototype->GetMaxStackSize();
-    uint32 configMaxStack = config->GetMaxStack(prototype->Quality);
+    // Retrieve item class and subclass
+    uint32_t itemClass = prototype->Class;
+    uint32_t itemSubClass = prototype->SubClass;
+    std::string itemName = prototype->Name; // Assuming Name is a std::string
+
+    // Flag to determine if the item should be sold individually
+    bool sellIndividually = false;
+
+    // Check for Consumable > Item Enhancement
+    if (itemClass == ITEM_CLASS_CONSUMABLE && 
+        itemSubClass == ITEM_SUBCLASS_ITEM_ENHANCEMENT)
+    {
+        sellIndividually = true;
+    }
+
+    // Check for Glyphs
+    else if (itemClass == ITEM_CLASS_GLYPH)
+    {
+        sellIndividually = true;
+    }
+
+    // Check for Trade Goods > Devices with "scope" in the name (case-insensitive)
+    else if (itemClass == ITEM_CLASS_TRADE_GOODS && 
+             itemSubClass == ITEM_SUBCLASS_DEVICES)
+    {
+        // Convert itemName to lowercase for case-insensitive comparison
+        std::string lowerItemName = itemName;
+        std::transform(lowerItemName.begin(), lowerItemName.end(), lowerItemName.begin(),
+                       [](unsigned char c) { return std::tolower(c); });
+
+        // Check if "scope" is a substring of the item name
+        if (lowerItemName.find("scope") != std::string::npos)
+        {
+            sellIndividually = true;
+        }
+    }
+
+    // If the item should be sold individually, return stack size of 1
+    if (sellIndividually)
+    {
+        if (config->DebugOutSeller)
+        {
+            LOG_DEBUG("module", "AHBot [%u]: Item %u is restricted to single sale.", 
+                      _id, prototype->ItemId);
+        }
+        return 1;
+    }
+
+    // Retrieve itemMaxStack and configMaxStack
+    uint32_t itemMaxStack = prototype->GetMaxStackSize();
+    uint32_t configMaxStack = config->GetMaxStack(prototype->Quality);
     
     // If configMaxStack is 0, default to item's inherent max stack size
     if (configMaxStack == 0)
@@ -923,13 +973,20 @@ uint32 AuctionHouseBot::DetermineStackSize(ItemTemplate const* prototype, AHBCon
     }
     
     // Calculate maxStack as the minimum of itemMaxStack and configMaxStack
-    uint32 maxStack = std::min(itemMaxStack, configMaxStack);
+    uint32_t maxStack = std::min(itemMaxStack, configMaxStack);
+    
+    // Determine whether to apply the stack divisor
+    bool applyDivisor = true;
+    if (itemClass == ITEM_CLASS_PROJECTILE)
+    {
+        applyDivisor = false; // Do not apply quality divisor for projectiles
+    }
     
     // Retrieve the stack divisor based on item quality
-    uint32 stackDivisor = GetStackDivisor(prototype->Quality);
+    uint32_t stackDivisor = GetStackDivisor(prototype->Quality);
     
-    // Adjust maxStack using the divisor only if the result is an integer
-    if (stackDivisor > 1 && maxStack % stackDivisor == 0)
+    // Adjust maxStack using the divisor only if applicable
+    if (applyDivisor && stackDivisor > 1 && maxStack % stackDivisor == 0)
     {
         maxStack = maxStack / stackDivisor;
     }
@@ -943,22 +1000,23 @@ uint32 AuctionHouseBot::DetermineStackSize(ItemTemplate const* prototype, AHBCon
     // Debug output
     if (config->DebugOutSeller)
     {
-        LOG_DEBUG("module", "AHBot [{}]: Item {}: itemMaxStack={}, configMaxStack={}, stackDivisor={}, adjusted maxStack={}",
-            _id, prototype->ItemId, itemMaxStack, configMaxStack, stackDivisor, maxStack);
+        LOG_DEBUG("module", "AHBot [%u]: Item %u: itemMaxStack=%u, configMaxStack=%u, stackDivisor=%u, adjusted maxStack=%u",
+                  _id, prototype->ItemId, itemMaxStack, configMaxStack, stackDivisor, maxStack);
     }
     
     // Proceed with determining the stack count
     if (maxStack > 1)
     {
-        uint32 stackCount = urand(1, maxStack);
+        uint32_t stackCount = 1 + rand() % maxStack; // Random number between 1 and maxStack
         
         // Optional: Favor full stacks
-        if (urand(1, 100) <= 30) // 30% chance for full stack
+        if ((1 + rand() % 100) <= 30) // 30% chance for full stack
             stackCount = maxStack;
         
         if (config->DebugOutSeller)
         {
-            LOG_DEBUG("module", "AHBot [{}]: Determined stack size for item {}: {}", _id, prototype->ItemId, stackCount);
+            LOG_DEBUG("module", "AHBot [%u]: Determined stack size for item %u: %u", 
+                      _id, prototype->ItemId, stackCount);
         }
         
         return stackCount;
