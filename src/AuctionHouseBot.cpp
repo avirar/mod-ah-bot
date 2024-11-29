@@ -917,7 +917,7 @@ uint32_t AuctionHouseBot::DetermineStackSize(ItemTemplate const* prototype, AHBC
     // Retrieve item class and subclass
     uint32_t itemClass = prototype->Class;
     uint32_t itemSubClass = prototype->SubClass;
-    std::string itemName = prototype->Name; // Assuming Name is a std::string
+    std::string itemName = prototype->Name1; // Name1 is a std::string
 
     // Flag to determine if the item should be sold individually
     bool sellIndividually = false;
