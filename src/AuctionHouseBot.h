@@ -47,6 +47,9 @@ private:
     time_t     _lastrun_h_sec;
     time_t     _lastrun_n_sec;
 
+    int _nextFactionToProcess = 0;
+
+
     //
     // Main operations
     //
