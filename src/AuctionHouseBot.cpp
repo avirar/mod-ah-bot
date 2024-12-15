@@ -895,7 +895,7 @@ uint64 AuctionHouseBot::CalculateItemPrice(const ItemTemplate* prototype, AHBCon
     price /= 25;
 
     // Additional logic for increasing mount prices
-    if (prototype->Class == ITEM_CLASS_MISC && prototype->SubClass == ITEM_SUBCLASS_MOUNT)
+    if (prototype->Class == ITEM_CLASS_MISC && prototype->SubClass == ITEM_SUBCLASS_JUNK_MOUNT)
     {
         // Apply a multiplier to mounts
         price *= 200; // Makes the mechanohogs >20,000g
