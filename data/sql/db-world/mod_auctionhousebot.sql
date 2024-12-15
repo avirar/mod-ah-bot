@@ -28,14 +28,14 @@ CREATE TABLE `mod_auctionhousebot` (
   `maxpricewhite` int(11) DEFAULT '250' COMMENT 'Maximum price of White items (percentage).',
   `minpricegreen` int(11) DEFAULT '800' COMMENT 'Minimum price of Green items (percentage).',
   `maxpricegreen` int(11) DEFAULT '1400' COMMENT 'Maximum price of Green items (percentage).',
-  `minpriceblue` int(11) DEFAULT '1250' COMMENT 'Minimum price of Blue items (percentage).',
-  `maxpriceblue` int(11) DEFAULT '1750' COMMENT 'Maximum price of Blue items (percentage).',
-  `minpricepurple` int(11) DEFAULT '2250' COMMENT 'Minimum price of Purple items (percentage).',
-  `maxpricepurple` int(11) DEFAULT '4550' COMMENT 'Maximum price of Purple items (percentage).',
-  `minpriceorange` int(11) DEFAULT '3250' COMMENT 'Minimum price of Orange items (percentage).',
-  `maxpriceorange` int(11) DEFAULT '5550' COMMENT 'Maximum price of Orange items (percentage).',
-  `minpriceyellow` int(11) DEFAULT '5250' COMMENT 'Minimum price of Yellow items (percentage).',
-  `maxpriceyellow` int(11) DEFAULT '6550' COMMENT 'Maximum price of Yellow items (percentage).',
+  `minpriceblue` int(11) DEFAULT '1700' COMMENT 'Minimum price of Blue items (percentage).',
+  `maxpriceblue` int(11) DEFAULT '3000' COMMENT 'Maximum price of Blue items (percentage).',
+  `minpricepurple` int(11) DEFAULT '3050' COMMENT 'Minimum price of Purple items (percentage).',
+  `maxpricepurple` int(11) DEFAULT '7750' COMMENT 'Maximum price of Purple items (percentage).',
+  `minpriceorange` int(11) DEFAULT '4400' COMMENT 'Minimum price of Orange items (percentage).',
+  `maxpriceorange` int(11) DEFAULT '9450' COMMENT 'Maximum price of Orange items (percentage).',
+  `minpriceyellow` int(11) DEFAULT '7100' COMMENT 'Minimum price of Yellow items (percentage).',
+  `maxpriceyellow` int(11) DEFAULT '11150' COMMENT 'Maximum price of Yellow items (percentage).',
   `minbidpricegrey` int(11) DEFAULT '70' COMMENT 'Starting bid price of Grey items as a percentage of the randomly chosen buyout price. Default: 70',
   `maxbidpricegrey` int(11) DEFAULT '100' COMMENT 'Starting bid price of Grey items as a percentage of the randomly chosen buyout price. Default: 100',
   `minbidpricewhite` int(11) DEFAULT '70' COMMENT 'Starting bid price of White items as a percentage of the randomly chosen buyout price. Default: 70',
@@ -75,9 +75,9 @@ CREATE TABLE `mod_auctionhousebot` (
 
 INSERT INTO `mod_auctionhousebot` (`auctionhouse`, `name`, `minitems`, `maxitems`, `percentgreytradegoods`, `percentwhitetradegoods`, `percentgreentradegoods`, `percentbluetradegoods`, `percentpurpletradegoods`, `percentorangetradegoods`, `percentyellowtradegoods`, `percentgreyitems`, `percentwhiteitems`, `percentgreenitems`, `percentblueitems`, `percentpurpleitems`, `percentorangeitems`, `percentyellowitems`, `minpricegrey`, `maxpricegrey`, `minpricewhite`, `maxpricewhite`, `minpricegreen`, `maxpricegreen`, `minpriceblue`, `maxpriceblue`, `minpricepurple`, `maxpricepurple`, `minpriceorange`, `maxpriceorange`, `minpriceyellow`, `maxpriceyellow`, `minbidpricegrey`, `maxbidpricegrey`, `minbidpricewhite`, `maxbidpricewhite`, `minbidpricegreen`, `maxbidpricegreen`, `minbidpriceblue`, `maxbidpriceblue`, `minbidpricepurple`, `maxbidpricepurple`, `minbidpriceorange`, `maxbidpriceorange`, `minbidpriceyellow`, `maxbidpriceyellow`, `maxstackgrey`, `maxstackwhite`, `maxstackgreen`, `maxstackblue`, `maxstackpurple`, `maxstackorange`, `maxstackyellow`, `buyerpricegrey`, `buyerpricewhite`, `buyerpricegreen`, `buyerpriceblue`, `buyerpricepurple`, `buyerpriceorange`, `buyerpriceyellow`, `buyerbiddinginterval`, `buyerbidsperinterval`)
 VALUES
-(2,'Alliance',50000,50000,0,20,3,1,1,0,0,0,20,28,20,7,0,0,100,150,150,250,800,1400,1250,1750,2250,4550,3250,5550,5250,6550,70,100,70,100,80,100,75,100,80,100,80,100,80,100,0,0,0,0,0,1,1,1,3,5,12,15,20,22,1,1),
-(6,'Horde',50000,50000,0,20,3,1,1,0,0,0,20,28,20,7,0,0,100,150,150,250,800,1400,1250,1750,2250,4550,3250,5550,5250,6550,70,100,70,100,80,100,75,100,80,100,80,100,80,100,0,0,0,0,0,1,1,1,3,5,12,15,20,22,1,1),
-(7,'Neutral',50000,50000,0,20,3,1,1,0,0,0,20,28,20,7,0,0,100,150,150,250,800,1400,1250,1750,2250,4550,3250,5550,5250,6550,70,100,70,100,80,100,75,100,80,100,80,100,80,100,0,0,0,0,0,1,1,1,3,5,12,15,20,22,1,1);
+(2,'Alliance',50000,50000,0,20,3,1,1,0,0,0,20,28,20,7,0,0,100,150,150,250,800,1400,1700,3000,3050,7750,4400,9450,7100,11150,70,100,70,100,80,100,75,100,80,100,80,100,80,100,0,0,0,0,0,1,1,1,3,5,12,15,20,22,1,1),
+(6,'Horde',50000,50000,0,20,3,1,1,0,0,0,20,28,20,7,0,0,100,150,150,250,800,1400,1700,3000,3050,7750,4400,9450,7100,11150,70,100,70,100,80,100,75,100,80,100,80,100,80,100,0,0,0,0,0,1,1,1,3,5,12,15,20,22,1,1),
+(7,'Neutral',50000,50000,0,20,3,1,1,0,0,0,20,28,20,7,0,0,100,150,150,250,800,1400,1700,3000,3050,7750,4400,9450,7100,11150,70,100,70,100,80,100,75,100,80,100,80,100,80,100,0,0,0,0,0,1,1,1,3,5,12,15,20,22,1,1);
 
 --
 -- Items blacklist
