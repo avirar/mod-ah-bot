@@ -894,6 +894,18 @@ uint64 AuctionHouseBot::CalculateItemPrice(const ItemTemplate* prototype, AHBCon
     price *= urand(config->GetMinPrice(prototype->Quality), config->GetMaxPrice(prototype->Quality));
     price /= 25;
 
+    // Additional logic for increasing mount prices
+    if (prototype->Class == ITEM_CLASS_MISC && prototype->SubClass == ITEM_SUBCLASS_MOUNT)
+    {
+        // Apply a multiplier to mounts
+        price *= 200; // Makes the mechanohogs >20,000g
+
+        if (config->DebugOutSeller)
+        {
+            LOG_INFO("module", "AHBot [{}]: Adjusted price for mount {}: {}", _id, prototype->ItemId, price);
+        }
+    }
+
     return price;
 }
 
