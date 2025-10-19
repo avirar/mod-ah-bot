@@ -80,9 +80,9 @@ void AHBot_AuctionHouseScript::OnBeforeAuctionHouseMgrSendAuctionOutbiddedMail(
 
 void AHBot_AuctionHouseScript::OnAuctionAdd(AuctionHouseObject* /*ah*/, AuctionEntry* auction)
 {
-    // 
+    //
     // The the configuration for the auction house
-    // 
+    //
 
     AuctionHouseEntry const* ahEntry = sAuctionMgr->GetAuctionHouseEntryFromHouse(auction->GetHouseId());
     AHBConfig*               config  = gNeutralConfig;
@@ -99,13 +99,13 @@ void AHBot_AuctionHouseScript::OnAuctionAdd(AuctionHouseObject* /*ah*/, AuctionE
         }
     }
 
-    // 
+    //
     // Consider only those auctions handled by the bots
-    // 
+    //
 
     if (config->ConsiderOnlyBotAuctions)
     {
-        if (gBotsId.find(auction->owner.GetCounter()) != gBotsId.end())
+        if (gBotsId.find(auction->owner.GetCounter()) == gBotsId.end())
         {
             return;
         }
@@ -133,6 +133,15 @@ void AHBot_AuctionHouseScript::OnAuctionAdd(AuctionHouseObject* /*ah*/, AuctionE
 
     ItemTemplate const* prototype = sObjectMgr->GetItemTemplate(auction->item_template);
 
+    if (!prototype)
+    {
+        if (config->DebugOut)
+        {
+            LOG_ERROR("module", "AHBot: Item template {} doesn't exist for OnAuctionAdd", auction->item_template);
+        }
+        return;
+    }
+
     if (config->DebugOut)
     {
         LOG_INFO("module", "AHBot: ah={}, item={}, count={}", auction->GetHouseId(), auction->item_template, config->GetItemCounts(prototype->Quality));
@@ -143,9 +152,9 @@ void AHBot_AuctionHouseScript::OnAuctionAdd(AuctionHouseObject* /*ah*/, AuctionE
 
 void AHBot_AuctionHouseScript::OnAuctionRemove(AuctionHouseObject* /*ah*/, AuctionEntry* auction)
 {
-    // 
+    //
     // Get the configuration for the auction house
-    // 
+    //
 
     AuctionHouseEntry const* ahEntry = sAuctionMgr->GetAuctionHouseEntryFromHouse(auction->GetHouseId());
     AHBConfig*               config  = gNeutralConfig;
@@ -162,13 +171,13 @@ void AHBot_AuctionHouseScript::OnAuctionRemove(AuctionHouseObject* /*ah*/, Aucti
         }
     }
 
-    // 
+    //
     // Consider only those auctions handled by the bots
-    // 
+    //
 
     if (config->ConsiderOnlyBotAuctions)
     {
-        if (gBotsId.find(auction->owner.GetCounter()) != gBotsId.end())
+        if (gBotsId.find(auction->owner.GetCounter()) == gBotsId.end())
         {
             return;
         }
@@ -195,6 +204,15 @@ void AHBot_AuctionHouseScript::OnAuctionRemove(AuctionHouseObject* /*ah*/, Aucti
     //
 
     ItemTemplate const* prototype = sObjectMgr->GetItemTemplate(auction->item_template);
+
+    if (!prototype)
+    {
+        if (config->DebugOut)
+        {
+            LOG_ERROR("module", "AHBot: Item template {} doesn't exist for OnAuctionRemove", auction->item_template);
+        }
+        return;
+    }
 
     if (config->DebugOut)
     {

@@ -573,13 +573,6 @@ void AuctionHouseBot::Sell(Player* AHBplayer, AHBConfig* config)
     uint32 auctions = getNofAuctions(config, auctionHouse, AHBplayer->GetGUID());
     uint32 items = 0;
 
-    if (auctions >= minItems)
-    {
-        if (config->DebugOutSeller)
-            LOG_ERROR("module", "AHBot [{}]: Auctions above minimum", _id);
-        return;
-    }
-
     if (auctions >= maxItems)
     {
         if (config->DebugOutSeller)
@@ -591,6 +584,11 @@ void AuctionHouseBot::Sell(Player* AHBplayer, AHBConfig* config)
     {
         // If no bot auctions exist, populate the auction house up to minItems / 10
         items = minItems / 10;
+    }
+    else if (auctions < minItems)
+    {
+        // Below minimum, post aggressively to reach minimum quickly
+        items = std::min(config->ItemsPerCycle, minItems - auctions);
     }
     else if ((maxItems - auctions) >= config->ItemsPerCycle)
     {
