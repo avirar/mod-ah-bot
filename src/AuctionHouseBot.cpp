@@ -69,23 +69,10 @@ uint32 AuctionHouseBot::getElement(const std::vector<uint32>& vec, int index, ui
 
     if (maxDup > 0)
     {
-        uint32 noStacks = 0;
-
-        // Iterate over the auctions in the auction house
-        for (AuctionHouseObject::AuctionEntryMap::const_iterator itr = auctionHouse->GetAuctionsBegin(); itr != auctionHouse->GetAuctionsEnd(); ++itr)
-        {
-            AuctionEntry* Aentry = itr->second;
-
-            // Check if the auction belongs to the bot
-            if (Aentry->owner.GetCounter() == botId)
-            {
-                // Check if the item ID matches
-                if (itemId == Aentry->item_template)
-                {
-                    noStacks++;
-                }
-            }
-        }
+        // USE CACHED COUNT instead of iterating through all auctions
+        // The cache is populated once per Sell() cycle, eliminating O(n²) complexity
+        auto it = _duplicateCounts.find(itemId);
+        uint32 noStacks = (it != _duplicateCounts.end()) ? it->second : 0;
 
         // If the number of stacks exceeds or equals the maximum allowed, return 0
         if (noStacks >= maxDup)
@@ -599,6 +586,20 @@ void AuctionHouseBot::Sell(Player* AHBplayer, AHBConfig* config)
         items = (maxItems - auctions);
     }
 
+    // PRE-CACHE DUPLICATE COUNTS (Phase 1 Optimization)
+    // Build a map of item_template -> count for all bot-owned auctions
+    // This eliminates the O(n) iteration per item in getElement()
+    _duplicateCounts.clear();
+    for (AuctionHouseObject::AuctionEntryMap::const_iterator itr = auctionHouse->GetAuctionsBegin();
+         itr != auctionHouse->GetAuctionsEnd(); ++itr)
+    {
+        AuctionEntry* Aentry = itr->second;
+        if (Aentry->owner.GetCounter() == _id)
+        {
+            _duplicateCounts[Aentry->item_template]++;
+        }
+    }
+
     // Retrieve the configuration for this run
     std::unordered_map<uint32, uint32> maxCounts = {
         {AHB_GREY_TG,   config->GetMaximum(AHB_GREY_TG)},
@@ -678,6 +679,10 @@ void AuctionHouseBot::Sell(Player* AHBplayer, AHBConfig* config)
     // Start a transaction outside the loop
     auto trans = CharacterDatabase.BeginTransaction();
 
+    // Create RNG once outside loops (Phase 1 Optimization: Fix random shuffle overhead)
+    std::random_device rd;
+    std::mt19937 rng(rd());
+
     for (uint32 cnt = 1; cnt <= items; cnt++)
     {
         uint32 itemID = 0;
@@ -691,8 +696,8 @@ void AuctionHouseBot::Sell(Player* AHBplayer, AHBConfig* config)
             // Shuffle itemBins to add randomness
             std::vector<size_t> indices(itemBins.size());
             std::iota(indices.begin(), indices.end(), 0); // Fill with 0, 1, ..., itemBins.size() - 1
-            
-            std::shuffle(indices.begin(), indices.end(), std::mt19937{std::random_device{}()});
+
+            std::shuffle(indices.begin(), indices.end(), rng);
             
             // Then, iterate over indices instead of itemBins
             for (size_t idx : indices)
@@ -807,6 +812,9 @@ void AuctionHouseBot::Sell(Player* AHBplayer, AHBConfig* config)
         auto it = currentCounts.find(choice);
         if (it != currentCounts.end())
             ++(it->second);
+
+        // Update the duplicate count cache for this item
+        _duplicateCounts[itemID]++;
 
         noSold++;
 

@@ -23,6 +23,7 @@
 #include "Common.h"
 #include "ObjectGuid.h"
 #include "AuctionHouseMgr.h"
+#include <unordered_map>
 
 #include "AuctionHouseBotCommon.h"
 #include "AuctionHouseBotConfig.h"
@@ -49,6 +50,8 @@ private:
 
     int _nextFactionToProcess = 0;
 
+    // Cache for duplicate item counts (optimization)
+    std::unordered_map<uint32, uint32> _duplicateCounts;
 
     //
     // Main operations
