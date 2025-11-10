@@ -184,23 +184,11 @@ void AHBot_AuctionHouseScript::OnAuctionRemove(AuctionHouseObject* /*ah*/, Aucti
     }
 
     //
-    // Verify if we can operate on the item
-    //
-
-    Item* pItem = sAuctionMgr->GetAItem(auction->item_guid);
-
-    if (!pItem)
-    {
-        if (config->DebugOut)
-        {
-            LOG_ERROR("module", "AHBot: Item {} doesn't exist, perhaps bought already?", auction->item_guid.ToString());
-        }
-
-        return;
-    }
-
-    //
     // Decrements
+    //
+    // Note: We don't check if the item exists because RemoveAItem() may have already
+    // been called before this hook (see AuctionHouseMgr.cpp line 542-543).
+    // We only need the item_template from the auction entry to decrement counts.
     //
 
     ItemTemplate const* prototype = sObjectMgr->GetItemTemplate(auction->item_template);

@@ -589,14 +589,32 @@ void AuctionHouseBot::Sell(Player* AHBplayer, AHBConfig* config)
     // PRE-CACHE DUPLICATE COUNTS (Phase 1 Optimization)
     // Build a map of item_template -> count for all bot-owned auctions
     // This eliminates the O(n) iteration per item in getElement()
+    //
+    // TIME-BASED DUPLICATE TRACKING:
+    // Only count auctions that still have more than DuplicatesTimeWindow hours remaining.
+    // This allows the bot to recreate items as old auctions approach expiration,
+    // maintaining equilibrium rather than filling once and getting stuck.
+    //
+    // Lower values (1-2 hours) allow faster rotation and better equilibrium.
+    // Higher values (6+ hours) are more conservative but may cause the bot to stall.
     _duplicateCounts.clear();
+
+    time_t currentTime = time(nullptr);
+    const time_t DUPLICATE_WINDOW = config->DuplicatesTimeWindow * 3600; // Convert hours to seconds
+
     for (AuctionHouseObject::AuctionEntryMap::const_iterator itr = auctionHouse->GetAuctionsBegin();
          itr != auctionHouse->GetAuctionsEnd(); ++itr)
     {
         AuctionEntry* Aentry = itr->second;
         if (Aentry->owner.GetCounter() == _id)
         {
-            _duplicateCounts[Aentry->item_template]++;
+            // Only count if auction has more than DUPLICATE_WINDOW remaining
+            time_t timeRemaining = Aentry->expire_time - currentTime;
+
+            if (timeRemaining > DUPLICATE_WINDOW)
+            {
+                _duplicateCounts[Aentry->item_template]++;
+            }
         }
     }
 

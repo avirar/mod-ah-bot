@@ -227,6 +227,7 @@ public:
     bool   Bind_Quest_Item;
 
     uint32 DuplicatesCount;
+    uint32 DuplicatesTimeWindow;
     uint32 ElapsingTimeClass;
 
     bool   DivisibleStacks;

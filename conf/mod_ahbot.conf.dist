@@ -82,6 +82,15 @@
 #        If set to zero then no limits are set in place.
 #    Default 0
 #
+#    AuctionHouseBot.DuplicatesTimeWindow
+#        Time window (in hours) for counting duplicates. Only auctions with more than this
+#        many hours remaining will count toward the DuplicatesCount limit.
+#        This allows the bot to pre-create replacements for items approaching expiration,
+#        maintaining auction house equilibrium rather than filling once and getting stuck.
+#        Lower values (1-2 hours) allow faster rotation and better equilibrium.
+#        Higher values (6+ hours) are more conservative but may cause the bot to stall.
+#    Default 1
+#
 #    AuctionHouseBot.DivisibleStacks
 #        Sell items in stack sizes which depends on the maximum amount per stack.
 #        For example, an item with max stack size 20 will be sold in 5, 10 15 and 20 stacks, and not at random.
@@ -121,6 +130,7 @@ AuctionHouseBot.GUID = 0
 AuctionHouseBot.ItemsPerCycle = 200
 AuctionHouseBot.ConsiderOnlyBotAuctions = 0
 AuctionHouseBot.DuplicatesCount = 20
+AuctionHouseBot.DuplicatesTimeWindow = 1
 AuctionHouseBot.DivisibleStacks = 0
 AuctionHouseBot.ElapsingTimeClass = 1
 AuctionHouseBot.SellZeroPriceItems = 1
